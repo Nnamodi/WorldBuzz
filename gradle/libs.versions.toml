@@ -1,0 +1,89 @@
+[versions]
+agp = "8.5.2"
+kotlin = "2.0.0"
+ksp = "2.0.0-1.0.23"
+
+activityCompose = "1.9.3"
+appcompat = "1.7.0"
+coil = "2.6.0"
+composeBom = "2025.01.00"
+composeIcon = "1.7.6"
+coreKtx = "1.13.1"
+coroutines = "1.6.4"
+datastore = "1.1.2"
+lifecycleRuntimeKtx = "2.8.7"
+koinBom = "3.6.0-wasm-alpha2"
+material3 = "1.3.1"
+moshi = "1.15.0"
+navigation = "2.8.5"
+okHttp = "4.12.0"
+paging = "3.3.5"
+pagingCompose = "3.3.5"
+retrofit = "2.9.0"
+room = "2.6.1"
+splashscreen = "1.0.1"
+
+espressoCore = "3.6.1"
+junit = "4.13.2"
+mockito = "5.0.0"
+
+[libraries]
+#android
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashscreen" }
+
+#compose
+compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
+compose-ui = { group = "androidx.compose.ui", name = "ui" }
+compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+compose-coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+
+#di
+koin-android = { module = "io.insert-koin:koin-android" }
+koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koinBom" }
+koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "kotlin" }
+koin-core = { module = "io.insert-koin:koin-core" }
+
+#material
+material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+material-icons = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "composeIcon" }
+
+#network
+moshi = { group = "com.squareup.moshi", name = "moshi", version.ref = "moshi" }
+moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
+okHttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okHttp" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
+
+#paging
+paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "pagingCompose" }
+paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging" }
+
+#persistence
+datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+
+#test
+compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+mockito = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+room = { id = "androidx.room", version.ref = "room" }
+
