@@ -25,16 +25,16 @@ interface NewsRepository {
 		languageCode: String
 	): Flow<PagingData<Article>>
 
-	fun fetchAllSources(): Flow<List<SourceDetail>>
-
-	fun fetchSourceDetails(source: Source): Flow<SourceDetail>
-
 	fun searchNews(
 		query: String,
 		categories: String = "",
 		sources: String = "",
 		languageCode: String
 	): Flow<PagingData<Article>>
+
+	fun fetchAllSources(): Flow<List<SourceDetail>>
+
+	fun fetchSourceDetails(source: Source): Flow<SourceDetail>
 
 	fun fetchSavedArticles(): Flow<PagingData<Article>>
 
