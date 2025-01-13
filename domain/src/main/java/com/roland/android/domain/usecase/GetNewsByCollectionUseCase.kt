@@ -10,14 +10,13 @@ import com.roland.android.domain.usecase.Collections.ReadingHistory
 import com.roland.android.domain.usecase.Collections.SavedArticles
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 class GetNewsByCollectionUseCase(
-	configuration: Configuration
-) : UseCase<GetNewsByCollectionUseCase.Request, GetNewsByCollectionUseCase.Response>(configuration), KoinComponent {
+	configuration: Configuration,
+	private val newsRepository: NewsRepository // for easy mocking during unit test
+) : UseCase<GetNewsByCollectionUseCase.Request, GetNewsByCollectionUseCase.Response>(configuration) { //, KoinComponent {
 
-	private val newsRepository by inject<NewsRepository>()
+//	private val newsRepository by inject<NewsRepository>()
 
 	override fun process(request: Request): Flow<Response> {
 		return when (request.collection) {
