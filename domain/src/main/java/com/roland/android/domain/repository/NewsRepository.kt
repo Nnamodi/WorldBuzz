@@ -13,7 +13,12 @@ interface NewsRepository {
 		selectedCategories: String,
 		selectedSources: String,
 		languageCode: String
-	): Flow<PagingData<Article>>
+	): Flow<List<Article>>
+
+	fun fetchRecommendedNews(
+		category: String,
+		languageCode: String
+	): Flow<List<Article>>
 
 	fun fetchNewsByCategory(
 		category: String,

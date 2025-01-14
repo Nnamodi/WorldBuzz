@@ -1,6 +1,5 @@
 package com.roland.android.domain.usecase
 
-import androidx.paging.PagingData
 import com.roland.android.domain.model.Article
 import com.roland.android.domain.model.CategoryModel
 import com.roland.android.domain.model.LanguageModel
@@ -22,7 +21,7 @@ class GetNewsUseCase(
 			request.source.name,
 			request.language.code
 		),
-		newsRepository.fetchNewsByCategory(
+		newsRepository.fetchRecommendedNews(
 			request.categoryModel.category,
 			request.language.code
 		)
@@ -37,8 +36,8 @@ class GetNewsUseCase(
 	) : UseCase.Request
 
 	data class Response(
-		val trendingNews: PagingData<Article>,
-		val recommendedNews: PagingData<Article>,
+		val trendingNews: List<Article>,
+		val recommendedNews: List<Article>
 	) : UseCase.Response
 
 }
