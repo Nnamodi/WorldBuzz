@@ -11,9 +11,7 @@ import kotlinx.coroutines.flow.combine
 class GetNewsUseCase(
 	configuration: Configuration,
 	private val newsRepository: NewsRepository // for easy mocking during unit test
-) : UseCase<GetNewsUseCase.Request, GetNewsUseCase.Response>(configuration) { //, KoinComponent {
-
-//	private val newsRepository by inject<NewsRepository>()
+) : UseCase<GetNewsUseCase.Request, GetNewsUseCase.Response>(configuration) {
 
 	override fun process(request: Request): Flow<Response> = combine(
 		newsRepository.fetchTrendingNews(

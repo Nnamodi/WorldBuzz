@@ -22,13 +22,13 @@ class GetNewsByCollectionUseCaseTest {
 	fun testProcess() = runTest {
 		whenever(
 			newsRepository.fetchNewsBySource("", "fr")
-		).thenReturn(flowOf(sampleNewsData))
+		).thenReturn(flowOf(sampleNewsPagingData))
 		whenever(
 			newsRepository.fetchSavedArticles()
-		).thenReturn(flowOf(sampleNewsData))
+		).thenReturn(flowOf(sampleNewsPagingData))
 		whenever(
 			newsRepository.fetchReadingHistory()
-		).thenReturn(flowOf(sampleNewsData))
+		).thenReturn(flowOf(sampleNewsPagingData))
 
 		val response = newsByCollectionUseCase.process(
 			GetNewsByCollectionUseCase.Request(
@@ -39,7 +39,7 @@ class GetNewsByCollectionUseCaseTest {
 		).first()
 		assertEquals(
 			GetNewsByCollectionUseCase.Response(
-				articles = sampleNewsData
+				articles = sampleNewsPagingData
 			),
 			response
 		)

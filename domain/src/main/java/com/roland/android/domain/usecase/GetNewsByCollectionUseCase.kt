@@ -14,9 +14,7 @@ import kotlinx.coroutines.flow.map
 class GetNewsByCollectionUseCase(
 	configuration: Configuration,
 	private val newsRepository: NewsRepository // for easy mocking during unit test
-) : UseCase<GetNewsByCollectionUseCase.Request, GetNewsByCollectionUseCase.Response>(configuration) { //, KoinComponent {
-
-//	private val newsRepository by inject<NewsRepository>()
+) : UseCase<GetNewsByCollectionUseCase.Request, GetNewsByCollectionUseCase.Response>(configuration) {
 
 	override fun process(request: Request): Flow<Response> {
 		return when (request.collection) {

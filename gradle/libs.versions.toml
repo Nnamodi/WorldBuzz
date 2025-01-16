@@ -78,6 +78,8 @@ coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test"
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 mockito = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito" }
+koin-test = { module = "io.insert-koin:koin-test" }
+koin-test-junit = { module = "io.insert-koin:koin-test-junit4" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -86,4 +88,3 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room = { id = "androidx.room", version.ref = "room" }
-

@@ -24,7 +24,7 @@ class GetNewsUseCaseTest {
 			newsRepository.fetchTrendingNews("general", "", "fr")
 		).thenReturn(flowOf(sampleNewsData))
 		whenever(
-			newsRepository.fetchNewsByCategory("general", "fr")
+			newsRepository.fetchRecommendedNews("general", "fr")
 		).thenReturn(flowOf(sampleNewsData))
 
 		val response = newsUseCase.process(
