@@ -6,12 +6,11 @@ import com.roland.android.domain.repository.SettingsRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-class SettingsRepositoryImpl : SettingsRepository, KoinComponent {
-	private val settingsDataSource by inject<SettingsDataSource>()
-	private val coroutineScope by inject<CoroutineScope>()
+class SettingsRepositoryImpl(
+	private val settingsDataSource: SettingsDataSource,
+	private val coroutineScope: CoroutineScope
+) : SettingsRepository {
 
 	override fun selectLanguage(languageCode: String) {
 		coroutineScope.launch {

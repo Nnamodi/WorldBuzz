@@ -23,13 +23,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-class NewsRepositoryImpl : NewsRepository, KoinComponent {
-	private val localNewsDataSource by inject<LocalNewsDataSource>()
-	private val remoteNewsDataSource by inject<RemoteNewsDataSource>()
-	private val scope by inject<CoroutineScope>()
+class NewsRepositoryImpl(
+	private val localNewsDataSource: LocalNewsDataSource,
+	private val remoteNewsDataSource: RemoteNewsDataSource,
+	private val scope: CoroutineScope
+) : NewsRepository {
 
 	override fun fetchTrendingNews(
 		selectedCategories: String,

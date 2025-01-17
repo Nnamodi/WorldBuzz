@@ -10,12 +10,12 @@ import com.roland.android.domain.model.Source
 import com.roland.android.domain.repository.UtilityRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-class UtilityRepositoryImpl(private val context: Context) : UtilityRepository, KoinComponent {
-	private val utilityDataSource by inject<UtilityDataSource>()
-	private val coroutineScope by inject<CoroutineScope>()
+class UtilityRepositoryImpl(
+	private val utilityDataSource: UtilityDataSource,
+	private val coroutineScope: CoroutineScope,
+	private val context: Context
+) : UtilityRepository {
 
 	override fun updateSubscribedSources(sources: List<Source>) {
 		coroutineScope.launch {
