@@ -1,7 +1,16 @@
+import java.util.Properties
+
 plugins {
 	alias(libs.plugins.android.library)
 	alias(libs.plugins.jetbrains.kotlin.android)
 	alias(libs.plugins.ksp)
+}
+
+fun getApiKey(): String {
+	val properties = Properties()
+	val tokenFile = project.rootProject.file("local.properties")
+	properties.load(tokenFile.inputStream())
+	return properties.getProperty("API_KEY")
 }
 
 android {
@@ -16,7 +25,11 @@ android {
 	}
 
 	buildTypes {
-		release {
+		getByName("debug") {
+			buildConfigField("String", "API_KEY", getApiKey())
+		}
+		getByName("release") {
+			buildConfigField("String", "API_KEY", getApiKey())
 			isMinifyEnabled = false
 			proguardFiles(
 				getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -30,6 +43,9 @@ android {
 	}
 	kotlinOptions {
 		jvmTarget = "17"
+	}
+	buildFeatures {
+		buildConfig = true
 	}
 }
 

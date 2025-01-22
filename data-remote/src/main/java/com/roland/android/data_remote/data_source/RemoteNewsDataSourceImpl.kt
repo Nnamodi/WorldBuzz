@@ -53,7 +53,7 @@ class RemoteNewsDataSourceImpl(
 
 	override fun fetchNewsBySource(source: String, languageCode: String, page: Int): List<Article> = runBlocking {
 		async {
-			newsService.fetchNewsByCategory(source, languageCode, page)
+			newsService.fetchNewsBySource(source, languageCode, page)
 				.map { articleModel ->
 					convertToArticle(articleModel)
 				}
