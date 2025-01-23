@@ -6,7 +6,7 @@ import com.roland.android.data_repository.R
 import com.roland.android.data_repository.data_source.local.UtilityDataSource
 import com.roland.android.domain.model.Article
 import com.roland.android.domain.model.CategoryModel
-import com.roland.android.domain.model.Source
+import com.roland.android.domain.model.SourceDetail
 import com.roland.android.domain.repository.UtilityRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -17,7 +17,7 @@ class UtilityRepositoryImpl(
 	private val context: Context
 ) : UtilityRepository {
 
-	override fun updateSubscribedSources(sources: List<Source>) {
+	override fun updateSubscribedSources(sources: List<SourceDetail>) {
 		coroutineScope.launch {
 			utilityDataSource.updateSubscribedSources(sources)
 		}

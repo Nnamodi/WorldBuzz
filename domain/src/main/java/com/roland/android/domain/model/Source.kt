@@ -4,7 +4,8 @@ import com.roland.android.domain.util.Constant.FAVICON_URL
 
 data class Source(
 	val id: String = "",
-	val name: String = ""
+	val name: String = "",
+	val subscribed: Boolean = false
 )
 
 data class SourceDetail(
@@ -14,7 +15,8 @@ data class SourceDetail(
 	val url: String = "",
 	val category: String = "",
 	val language: String = "",
-	val country: String = ""
+	val country: String = "",
+	val subscribed: Boolean = false
 ) {
 	fun iconUrl() = FAVICON_URL + url
 }

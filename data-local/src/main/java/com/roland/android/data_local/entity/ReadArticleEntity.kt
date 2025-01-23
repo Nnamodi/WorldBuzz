@@ -1,6 +1,12 @@
-package com.roland.android.domain.model
+package com.roland.android.data_local.entity
 
-data class Article(
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.roland.android.domain.model.Source
+
+@Entity
+data class ReadArticleEntity(
+	@PrimaryKey(autoGenerate = true)
 	val id: Long = 0,
 	val source: Source = Source(),
 	val author: String = "",

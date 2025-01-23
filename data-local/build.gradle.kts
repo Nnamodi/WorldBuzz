@@ -48,6 +48,9 @@ dependencies {
 	implementation(libs.koin.core)
 	implementation(platform(libs.koin.bom))
 
+	// gson
+	implementation(libs.gson)
+
 	// other modules
 	implementation(project(path = ":data-repository"))
 	implementation(project(path = ":domain"))
