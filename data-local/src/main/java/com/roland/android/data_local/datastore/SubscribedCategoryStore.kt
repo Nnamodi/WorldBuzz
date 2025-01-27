@@ -24,11 +24,11 @@ class SubscribedCategoryStore(
 	}
 
 	suspend fun updateSubscribedCategories(categoryModels: List<CategoryModel>) {
-		datastore.edit {
+		datastore.edit { pref ->
 			val categories = categoryModels
 				.map { it.category }
 				.joinToString { SEPARATOR }
-			it[SUBSCRIBED_CATEGORY_KEY] = categories
+			pref[SUBSCRIBED_CATEGORY_KEY] = categories
 		}
 	}
 }

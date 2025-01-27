@@ -57,8 +57,8 @@ class LocalNewsDataSourceImpl(
 
 	override fun fetchAllSources(): Flow<List<SourceDetail>> {
 		return sourceDao.fetchAllSources()
-			.map { sourceDetailEnities ->
-				sourceDetailEnities.map { it.convertToSourceDetail() }
+			.map { sourceDetailEntities ->
+				sourceDetailEntities.map { it.convertToSourceDetail() }
 			}
 	}
 
@@ -84,8 +84,8 @@ class LocalNewsDataSourceImpl(
 
 	override fun fetchSubscribedSources(): Flow<List<Source>> {
 		return sourceDao.fetchAllSources()
-			.map { sourceEnities ->
-				sourceEnities.map { it.convertToSource() }
+			.map { sourceEntities ->
+				sourceEntities.map { it.convertToSource() }
 			}
 	}
 

@@ -25,7 +25,7 @@ class SettingsDataSourceImpl(
 	}
 
 	override suspend fun enableReadingHistory(enable: Boolean) {
-		settingsStore.checkIsReadingHistoryEnable()
+		settingsStore.enableReadingHistory(enable)
 	}
 
 	override fun isReadingHistoryEnabled(): Flow<Boolean> {
