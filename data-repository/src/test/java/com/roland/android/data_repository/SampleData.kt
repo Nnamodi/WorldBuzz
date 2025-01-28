@@ -1,5 +1,6 @@
 package com.roland.android.data_repository
 
+import androidx.paging.PagingData
 import com.roland.android.domain.model.Article
 import com.roland.android.domain.model.Source
 import com.roland.android.domain.model.SourceDetail
@@ -11,6 +12,8 @@ val sampleNewsData = listOf(
 	Article(),
 	Article()
 )
+
+val sampleNewsPagingData = PagingData.from(sampleNewsData)
 
 val sampleNewsSource = Source()
 
