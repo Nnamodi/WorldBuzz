@@ -2,7 +2,6 @@ package com.roland.android.domain
 
 import com.roland.android.domain.model.CategoryModel
 import com.roland.android.domain.model.LanguageModel
-import com.roland.android.domain.model.Source
 import com.roland.android.domain.repository.NewsRepository
 import com.roland.android.domain.usecase.GetNewsUseCase
 import junit.framework.TestCase.assertEquals
@@ -29,9 +28,9 @@ class GetNewsUseCaseTest {
 
 		val response = newsUseCase.process(
 			GetNewsUseCase.Request(
-				categoryModel = CategoryModel.All,
-				source = Source(),
-				language = LanguageModel.French
+				categoryModels = CategoryModel.entries,
+				sources = "",
+				languageCode = LanguageModel.French.code
 			)
 		).first()
 		assertEquals(

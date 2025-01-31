@@ -1,6 +1,7 @@
 package com.roland.android.data_remote.di
 
-import com.roland.android.data_remote.BuildConfig
+import android.content.Context
+import com.roland.android.data_remote.R
 import com.roland.android.data_remote.data_source.RemoteNewsDataSourceImpl
 import com.roland.android.data_remote.network.service.NewsService
 import com.roland.android.data_remote.utils.Constant.BASE_URL
@@ -15,14 +16,15 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
 object NetworkModule {
-	private fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
+	private fun provideOkHttpClient(context: Context): OkHttpClient = OkHttpClient.Builder()
 		.readTimeout(60, TimeUnit.SECONDS)
 		.connectTimeout(60, TimeUnit.SECONDS)
 		.addInterceptor(
 			Interceptor { chain: Interceptor.Chain ->
+				val apiKey = context.getString(R.string.api_key)
 				val request = chain.request()
 					.newBuilder()
-					.header("Authorization", "Bearer${BuildConfig.API_KEY}")
+					.header("Authorization", "Bearer${apiKey}")
 					.build()
 				chain.proceed(request)
 			}
@@ -46,7 +48,7 @@ object NetworkModule {
 	}
 
 	val networkModule = module {
-		single { provideOkHttpClient() }
+		single { provideOkHttpClient(get<Context>().applicationContext) }
 		single { provideMoshi() }
 		single { provideRetrofit(get(), get()) }
 		single { provideNewsService(get()) }

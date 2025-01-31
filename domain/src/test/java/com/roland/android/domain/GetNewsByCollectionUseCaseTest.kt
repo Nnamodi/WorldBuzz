@@ -33,8 +33,8 @@ class GetNewsByCollectionUseCaseTest {
 		val response = newsByCollectionUseCase.process(
 			GetNewsByCollectionUseCase.Request(
 				collection = Collections.SavedArticles,
-				source = Source(),
-				language = LanguageModel.French
+				sourceName = Source().name,
+				languageCode = LanguageModel.French.code
 			)
 		).first()
 		assertEquals(

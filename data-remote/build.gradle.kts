@@ -22,14 +22,15 @@ android {
 
 		testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
 		consumerProguardFiles("consumer-rules.pro")
+		resValue("string", "api_key", "")
 	}
 
 	buildTypes {
 		getByName("debug") {
-			buildConfigField("String", "API_KEY", getApiKey())
+			resValue("string", "api_key", getApiKey())
 		}
 		getByName("release") {
-			buildConfigField("String", "API_KEY", getApiKey())
+			resValue("string", "api_key", getApiKey())
 			isMinifyEnabled = false
 			proguardFiles(
 				getDefaultProguardFile("proguard-android-optimize.txt"),
