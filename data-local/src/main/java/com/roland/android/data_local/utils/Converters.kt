@@ -8,7 +8,7 @@ import com.roland.android.domain.model.Article
 import com.roland.android.domain.model.Source
 import com.roland.android.domain.model.SourceDetail
 
-object Converters {
+internal object Converters {
 	const val SEPARATOR = "|"
 
 	fun ArticleEntity.convertToArticle() = Article(

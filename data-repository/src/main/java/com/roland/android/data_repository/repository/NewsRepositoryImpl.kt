@@ -18,6 +18,7 @@ import com.roland.android.domain.model.CategoryModel
 import com.roland.android.domain.model.Source
 import com.roland.android.domain.model.SourceDetail
 import com.roland.android.domain.repository.NewsRepository
+import com.roland.android.domain.util.Constant.SEPARATOR
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -35,7 +36,7 @@ class NewsRepositoryImpl(
 		selectedSources: String,
 		languageCode: String
 	): Flow<List<Article>> {
-		val categories = selectedCategories.split(',')
+		val categories = selectedCategories.split(SEPARATOR)
 		return try {
 			val remoteData = remoteNewsDataSource.fetchTrendingNews(
 				selectedCategories,

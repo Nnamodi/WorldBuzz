@@ -2,9 +2,8 @@ package com.roland.android.domain.usecase
 
 import androidx.paging.PagingData
 import com.roland.android.domain.model.Article
-import com.roland.android.domain.model.LanguageModel
-import com.roland.android.domain.model.Source
 import com.roland.android.domain.repository.NewsRepository
+import com.roland.android.domain.usecase.Collections.NewsByCategory
 import com.roland.android.domain.usecase.Collections.NewsBySource
 import com.roland.android.domain.usecase.Collections.ReadingHistory
 import com.roland.android.domain.usecase.Collections.SavedArticles
@@ -18,9 +17,13 @@ class GetNewsByCollectionUseCase(
 
 	override fun process(request: Request): Flow<Response> {
 		return when (request.collection) {
+			NewsByCategory -> newsRepository.fetchNewsByCategory(
+				request.category,
+				request.languageCode
+			)
 			NewsBySource -> newsRepository.fetchNewsBySource(
-				request.source.name,
-				request.language.code
+				request.sourceName,
+				request.languageCode
 			)
 			SavedArticles -> newsRepository.fetchSavedArticles()
 			ReadingHistory -> newsRepository.fetchReadingHistory()
@@ -30,8 +33,9 @@ class GetNewsByCollectionUseCase(
 
 	data class Request(
 		val collection: Collections,
-		val source: Source,
-		val language: LanguageModel
+		val category: String = "",
+		val sourceName: String = "",
+		val languageCode: String
 	) : UseCase.Request
 
 	data class Response(val articles: PagingData<Article>) : UseCase.Response
@@ -39,6 +43,7 @@ class GetNewsByCollectionUseCase(
 }
 
 enum class Collections(val id: String) {
+	NewsByCategory("by_category"),
 	NewsBySource("by_source"),
 	SavedArticles("saved_news"),
 	ReadingHistory("reading_history")
