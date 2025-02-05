@@ -49,7 +49,7 @@ dependencies {
 	implementation(platform(libs.koin.bom))
 
 	// gson
-	implementation(libs.gson)
+	api(libs.gson)
 
 	// other modules
 	implementation(project(path = ":data-repository"))
