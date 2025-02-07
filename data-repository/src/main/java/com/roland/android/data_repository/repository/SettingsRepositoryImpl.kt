@@ -32,6 +32,10 @@ class SettingsRepositoryImpl(
 		return settingsDataSource.getSelectedTextSize()
 	}
 
+	override fun isReadingHistoryEnabled(): Flow<Boolean> {
+		return settingsDataSource.isReadingHistoryEnabled()
+	}
+
 	override fun enableReadingHistory(enable: Boolean): Flow<Boolean> {
 		coroutineScope.launch {
 			settingsDataSource.enableReadingHistory(enable)

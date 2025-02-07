@@ -13,6 +13,8 @@ interface SettingsRepository {
 
 	fun getSelectedTextSize(): Flow<Int>
 
+	fun isReadingHistoryEnabled(): Flow<Boolean>
+
 	fun enableReadingHistory(enable: Boolean): Flow<Boolean>
 
 }
