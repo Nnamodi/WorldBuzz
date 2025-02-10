@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="splash_background">#202822</color>
+    <color name="primaryColor">#FFD9D9</color>
 
-    <style name="Theme.WorldBuzz" parent="android:Theme.Material.Light.NoActionBar" />
+    // App theme
+    <style name="Theme.WorldBuzz" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:colorPrimary">@color/primaryColor</item>
+    </style>
+
+    // Splash theme
+    <style name="Theme.Splash" parent="Theme.SplashScreen">
+        <item name="android:colorPrimary">@color/primaryColor</item>
+        <item name="windowSplashScreenBackground">@color/primaryColor</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/app_logo</item>
+        <item name="android:windowSplashScreenBehavior">icon_preferred</item>
+        <item name="postSplashScreenTheme">@style/Theme.WorldBuzz</item>
+    </style>
 </resources>
