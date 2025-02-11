@@ -1,4 +1,4 @@
-package com.roland.android.worldbuzz
+package com.roland.android.worldbuzz.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,10 +11,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.roland.android.worldbuzz.R
 import com.roland.android.worldbuzz.ui.theme.WorldBuzzTheme
 
 class MainActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
+		setTheme(R.style.Theme_WorldBuzz)
 		super.onCreate(savedInstanceState)
 		enableEdgeToEdge()
 		setContent {
