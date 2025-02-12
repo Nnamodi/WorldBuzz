@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">World Buzz</string>
+    <string name="back">Back</string>
+    <string name="home">Home</string>
+    <string name="discover">Discover</string>
+    <string name="profile">Profile</string>
+    <string name="breaking_news">Breaking News</string>
+    <string name="save">Save</string>
+    <string name="unsave">Unsave</string>
+    <string name="more">More</string>
 </resources>
