@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 
 data class SourceModel(
 	@Json(name = "id")
-	val id: String = "",
+	val id: String? = null,
 	@Json(name = "name")
 	val name: String = ""
 )

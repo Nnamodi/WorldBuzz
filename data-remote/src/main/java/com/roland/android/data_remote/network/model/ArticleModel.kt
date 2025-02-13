@@ -6,17 +6,17 @@ data class ArticleModel(
 	@Json(name = "source")
 	val source: SourceModel = SourceModel(),
 	@Json(name = "author")
-	val author: String = "",
+	val author: String? = null,
 	@Json(name = "title")
 	val title: String = "",
 	@Json(name = "description")
-	val description: String = "",
+	val description: String? = null,
 	@Json(name = "url")
 	val url: String = "",
 	@Json(name = "urlToImage")
-	val imageUrl: String = "",
+	val imageUrl: String? = null,
 	@Json(name = "publishedAt")
 	val publishedAt: String = "",
 	@Json(name = "content")
-	val content: String = ""
+	val content: String? = null
 )

@@ -1,49 +1,62 @@
 package com.roland.android.data_remote.network.service
 
-import com.roland.android.data_remote.network.model.ArticleModel
-import com.roland.android.data_remote.network.model.SourceDetailModel
+import com.roland.android.data_remote.network.model.ArticleListModel
+import com.roland.android.data_remote.network.model.SourceListModel
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface NewsService {
 
-	@GET("/v2/top-headlines")
+	@GET("top-headlines")
 	suspend fun fetchTrendingNews(
 		@Query("category") selectedCategories: String,
 		@Query("sources") selectedSources: String,
-		@Query("language") languageCode: String
-	): List<ArticleModel>
+		@Query("language") languageCode: String,
+		@Query("country") country: String,
+		@Query("apiKey") apiKey: String
+	): ArticleListModel
 
-	@GET("/v2/top-headlines")
+	@GET("top-headlines")
 	suspend fun fetchRecommendedNews(
 		@Query("category") category: String,
-		@Query("language") languageCode: String
-	): List<ArticleModel>
+		@Query("language") languageCode: String,
+		@Query("country") country: String,
+		@Query("apiKey") apiKey: String
+	): ArticleListModel
 
-	@GET("/v2/top-headlines")
+	@GET("top-headlines")
 	suspend fun fetchNewsByCategory(
 		@Query("category") category: String,
 		@Query("language") languageCode: String,
+		@Query("country") country: String,
+		@Query("apiKey") apiKey: String,
 		@Query("page") page: Int
-	): List<ArticleModel>
+	): ArticleListModel
 
-	@GET("/v2/everything")
+	@GET("everything")
 	suspend fun fetchNewsBySource(
 		@Query("sources") source: String,
 		@Query("language") languageCode: String,
+		@Query("country") country: String,
+		@Query("apiKey") apiKey: String,
 		@Query("page") page: Int
-	): List<ArticleModel>
+	): ArticleListModel
 
-	@GET("/v2/everything")
+	@GET("everything")
 	suspend fun searchNews(
 		@Query("q") query: String = "",
 		@Query("category") categories: String = "",
 		@Query("sources") sources: String = "",
 		@Query("language") languageCode: String,
+		@Query("country") country: String,
+		@Query("apiKey") apiKey: String,
 		@Query("page") page: Int
-	): List<ArticleModel>
+	): ArticleListModel
 
-	@GET("/v2/top-headlines/sources")
-	suspend fun fetchAllSources(): List<SourceDetailModel>
+	@GET("top-headlines/sources")
+	suspend fun fetchAllSources(
+		@Query("country") country: String,
+		@Query("apiKey") apiKey: String
+	): SourceListModel
 
 }

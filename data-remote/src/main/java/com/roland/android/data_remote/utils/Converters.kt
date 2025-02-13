@@ -14,13 +14,13 @@ import java.util.Locale
 object Converters {
 	fun convertToArticle(articleModel: ArticleModel) = Article(
 		source = convertToSource(articleModel.source),
-		author = articleModel.author,
+		author = articleModel.author ?: "",
 		title = articleModel.title,
-		description = articleModel.description,
+		description = articleModel.description ?: "",
 		url = articleModel.url,
-		imageUrl = articleModel.imageUrl,
+		imageUrl = articleModel.imageUrl ?: "",
 		publishedAt = articleModel.publishedAt.formatDate(),
-		content = articleModel.content
+		content = articleModel.content ?: ""
 	)
 
 	private fun convertToSource(sourceModel: SourceModel) = Source(

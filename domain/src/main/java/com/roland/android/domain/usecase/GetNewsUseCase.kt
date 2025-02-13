@@ -19,7 +19,7 @@ class GetNewsUseCase(
 			request.languageCode
 		),
 		newsRepository.fetchRecommendedNews(
-			request.categoryModels.random().category,
+			request.categoryModels.getOrNull(0)?.category ?: "",
 			request.languageCode
 		)
 	) { trending, recommended ->

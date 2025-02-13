@@ -3,7 +3,7 @@ package com.roland.android.domain.model
 import com.roland.android.domain.util.Constant.FAVICON_URL
 
 data class Source(
-	val id: String = "",
+	val id: String? = null,
 	val name: String = "",
 	val subscribed: Boolean = false
 )
