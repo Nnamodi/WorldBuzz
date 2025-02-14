@@ -1,21 +1,17 @@
 package com.roland.android.worldbuzz.ui.screens.discover
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
-import com.roland.android.domain.model.Article
 import com.roland.android.domain.model.CategoryModel
 import com.roland.android.domain.repository.SettingsRepository
 import com.roland.android.domain.usecase.Collections
 import com.roland.android.domain.usecase.GetNewsByCollectionUseCase
 import com.roland.android.worldbuzz.data.ResponseConverter
-import com.roland.android.worldbuzz.data.State
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -32,12 +28,145 @@ class DiscoverViewModel : ViewModel(), KoinComponent {
 	private var selectedLanguage by mutableStateOf("")
 
 	init {
-		fetchCategorizedNewsI()
-		fetchCategorizedNewsII()
+		fetchAllNews()
+		fetchBusinessNews()
+		fetchEntertainmentNews()
+		fetchHealthNews()
+		fetchScienceNews()
+		fetchSportsNews()
+		fetchTechNews()
 		viewModelScope.launch {
 			_discoverUiState.collect {
 				discoverUiState = it
+				Log.i("DiscoverUiData", "$it")
 			}
+		}
+	}
+
+	private fun fetchAllNews() {
+		getSelectedLanguage()
+		viewModelScope.launch {
+			newsByCollectionUseCase.execute(
+				GetNewsByCollectionUseCase.Request(
+					collection = Collections.NewsByCategory,
+					category = CategoryModel.All.category,
+					languageCode = selectedLanguage
+				)
+			)
+				.map { converter.convertListData(it) }
+				.collect { news ->
+					_discoverUiState.update {
+						it.copy(allNews = news)
+					}
+				}
+		}
+	}
+
+	private fun fetchBusinessNews() {
+		viewModelScope.launch {
+			newsByCollectionUseCase.execute(
+				GetNewsByCollectionUseCase.Request(
+					collection = Collections.NewsByCategory,
+					category = CategoryModel.Business.category,
+					languageCode = selectedLanguage
+				)
+			)
+				.map { converter.convertListData(it) }
+				.collect { news ->
+					_discoverUiState.update {
+						it.copy(businessNews = news)
+					}
+				}
+		}
+	}
+
+	private fun fetchEntertainmentNews() {
+		viewModelScope.launch {
+			newsByCollectionUseCase.execute(
+				GetNewsByCollectionUseCase.Request(
+					collection = Collections.NewsByCategory,
+					category = CategoryModel.Entertainment.category,
+					languageCode = selectedLanguage
+				)
+			)
+				.map { converter.convertListData(it) }
+				.collect { news ->
+					_discoverUiState.update {
+						it.copy(entertainmentNews = news)
+					}
+				}
+		}
+	}
+
+	private fun fetchHealthNews() {
+		viewModelScope.launch {
+			newsByCollectionUseCase.execute(
+				GetNewsByCollectionUseCase.Request(
+					collection = Collections.NewsByCategory,
+					category = CategoryModel.Health.category,
+					languageCode = selectedLanguage
+				)
+			)
+				.map { converter.convertListData(it) }
+				.collect { news ->
+					_discoverUiState.update {
+						it.copy(healthNews = news)
+					}
+				}
+		}
+	}
+
+	private fun fetchScienceNews() {
+		viewModelScope.launch {
+			newsByCollectionUseCase.execute(
+				GetNewsByCollectionUseCase.Request(
+					collection = Collections.NewsByCategory,
+					category = CategoryModel.Science.category,
+					languageCode = selectedLanguage
+				)
+			)
+				.map { converter.convertListData(it) }
+				.collect { news ->
+					_discoverUiState.update {
+						it.copy(scienceNews = news)
+					}
+				}
+		}
+	}
+
+	private fun fetchSportsNews() {
+		viewModelScope.launch {
+			newsByCollectionUseCase.execute(
+				GetNewsByCollectionUseCase.Request(
+					collection = Collections.NewsByCategory,
+					category = CategoryModel.Sports.category,
+					languageCode = selectedLanguage
+				)
+			)
+				.map { converter.convertListData(it) }
+				.collect { news ->
+					_discoverUiState.update {
+						it.copy(sportsNews = news)
+					}
+				}
+		}
+	}
+
+	private fun fetchTechNews() {
+		viewModelScope.launch {
+			newsByCollectionUseCase.execute(
+				GetNewsByCollectionUseCase.Request(
+					collection = Collections.NewsByCategory,
+					category = CategoryModel.Technology.category,
+					languageCode = selectedLanguage
+				)
+			)
+				.map { converter.convertListData(it) }
+				.collect { news ->
+					_discoverUiState.update {
+						it.copy(techNews = news)
+					}
+				}
 		}
 	}
 
@@ -49,60 +178,14 @@ class DiscoverViewModel : ViewModel(), KoinComponent {
 		}
 	}
 
-	private fun fetchNewsByCategory(category: String): Flow<State<PagingData<Article>>> {
-		getSelectedLanguage()
-		return newsByCollectionUseCase.execute(
-			GetNewsByCollectionUseCase.Request(
-				collection = Collections.NewsByCategory,
-				category = category,
-				languageCode = selectedLanguage
-			)
-		).map { converter.convertListData(it) }
-	}
-
-	private fun fetchCategorizedNewsI() {
-		val categories = CategoryModel.entries
-		viewModelScope.launch {
-			combine(
-				fetchNewsByCategory(categories[0].category),
-				fetchNewsByCategory(categories[1].category),
-				fetchNewsByCategory(categories[2].category),
-				fetchNewsByCategory(categories[3].category)
-			) { all, business, entertainment, health ->
-				_discoverUiState.update {
-					it.copy(
-						allNews = all,
-						businessNews = business,
-						entertainmentNews = entertainment,
-						healthNews = health
-					)
-				}
-			}
-		}
-	}
-
-	private fun fetchCategorizedNewsII() {
-		val categories = CategoryModel.entries
-		viewModelScope.launch {
-			combine(
-				fetchNewsByCategory(categories[4].category),
-				fetchNewsByCategory(categories[5].category),
-				fetchNewsByCategory(categories[6].category)
-			) { science, sports, tech ->
-				_discoverUiState.update {
-					it.copy(
-						scienceNews = science,
-						sportsNews = sports,
-						techNews = tech
-					)
-				}
-			}
-		}
-	}
-
 	fun retry() {
 		_discoverUiState.value = DiscoverUiState()
-		fetchCategorizedNewsI()
-		fetchCategorizedNewsII()
+		fetchAllNews()
+		fetchBusinessNews()
+		fetchEntertainmentNews()
+		fetchHealthNews()
+		fetchScienceNews()
+		fetchSportsNews()
+		fetchTechNews()
 	}
 }

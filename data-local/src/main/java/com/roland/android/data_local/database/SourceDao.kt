@@ -16,7 +16,7 @@ interface SourceDao {
 	@Query("SELECT * FROM SourceDetailEntity WHERE subscribed LIKE 1")
 	fun fetchSubscribedSources(): Flow<List<SourceDetailEntity>>
 
-	@Query("SELECT * FROM SourceDetailEntity WHERE id LIKE :sourceId")
+	@Query("SELECT * FROM SourceDetailEntity WHERE id LIKE :sourceId OR name LIKE :sourceId")
 	fun fetchSourceDetails(sourceId: String): Flow<SourceDetailEntity>
 
 	@Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -68,7 +68,7 @@ class LocalNewsDataSourceImpl(
 	}
 
 	override fun fetchSourceDetails(source: Source): Flow<SourceDetail> {
-		return sourceDao.fetchSourceDetails(source.id)
+		return sourceDao.fetchSourceDetails(source.id ?: source.name)
 			.map { it.convertToSourceDetail() }
 	}
 

@@ -1,5 +1,6 @@
 package com.roland.android.worldbuzz.ui.screens.settings
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -29,6 +30,7 @@ class SettingsViewModel : ViewModel(), KoinComponent {
 		viewModelScope.launch {
 			_settingsUiState.collect {
 				settingsUiState = it
+				Log.i("SettingsUiData", "$it")
 			}
 		}
 	}
