@@ -6,10 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.roland.android.domain.model.CategoryModel
 import com.roland.android.domain.repository.SettingsRepository
-import com.roland.android.domain.usecase.Collections
-import com.roland.android.domain.usecase.GetNewsByCollectionUseCase
+import com.roland.android.domain.usecase.CategorySet
+import com.roland.android.domain.usecase.GetNewsByCategoryUseCase
 import com.roland.android.worldbuzz.data.ResponseConverter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
@@ -19,7 +18,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class DiscoverViewModel : ViewModel(), KoinComponent {
-	private val newsByCollectionUseCase by inject<GetNewsByCollectionUseCase>()
+	private val newsByCategoryUseCase by inject<GetNewsByCategoryUseCase>()
 	private val settingsRepository by inject<SettingsRepository>()
 	private val converter by inject<ResponseConverter>()
 
@@ -28,13 +27,8 @@ class DiscoverViewModel : ViewModel(), KoinComponent {
 	private var selectedLanguage by mutableStateOf("")
 
 	init {
-		fetchAllNews()
-		fetchBusinessNews()
-		fetchEntertainmentNews()
-		fetchHealthNews()
-		fetchScienceNews()
-		fetchSportsNews()
-		fetchTechNews()
+		fetchNewsI()
+		fetchNewsII()
 		viewModelScope.launch {
 			_discoverUiState.collect {
 				discoverUiState = it
@@ -43,128 +37,36 @@ class DiscoverViewModel : ViewModel(), KoinComponent {
 		}
 	}
 
-	private fun fetchAllNews() {
+	private fun fetchNewsI() {
 		getSelectedLanguage()
 		viewModelScope.launch {
-			newsByCollectionUseCase.execute(
-				GetNewsByCollectionUseCase.Request(
-					collection = Collections.NewsByCategory,
-					category = CategoryModel.All.category,
+			newsByCategoryUseCase.execute(
+				GetNewsByCategoryUseCase.Request(
+					categorySet = CategorySet.First,
 					languageCode = selectedLanguage
 				)
 			)
-				.map { converter.convertListData(it) }
+				.map { converter.convertDiscoverDataI(it) }
 				.collect { news ->
 					_discoverUiState.update {
-						it.copy(allNews = news)
+						it.copy(newsI = news)
 					}
 				}
 		}
 	}
 
-	private fun fetchBusinessNews() {
+	private fun fetchNewsII() {
 		viewModelScope.launch {
-			newsByCollectionUseCase.execute(
-				GetNewsByCollectionUseCase.Request(
-					collection = Collections.NewsByCategory,
-					category = CategoryModel.Business.category,
+			newsByCategoryUseCase.execute(
+				GetNewsByCategoryUseCase.Request(
+					categorySet = CategorySet.Second,
 					languageCode = selectedLanguage
 				)
 			)
-				.map { converter.convertListData(it) }
+				.map { converter.convertDiscoverDataII(it) }
 				.collect { news ->
 					_discoverUiState.update {
-						it.copy(businessNews = news)
-					}
-				}
-		}
-	}
-
-	private fun fetchEntertainmentNews() {
-		viewModelScope.launch {
-			newsByCollectionUseCase.execute(
-				GetNewsByCollectionUseCase.Request(
-					collection = Collections.NewsByCategory,
-					category = CategoryModel.Entertainment.category,
-					languageCode = selectedLanguage
-				)
-			)
-				.map { converter.convertListData(it) }
-				.collect { news ->
-					_discoverUiState.update {
-						it.copy(entertainmentNews = news)
-					}
-				}
-		}
-	}
-
-	private fun fetchHealthNews() {
-		viewModelScope.launch {
-			newsByCollectionUseCase.execute(
-				GetNewsByCollectionUseCase.Request(
-					collection = Collections.NewsByCategory,
-					category = CategoryModel.Health.category,
-					languageCode = selectedLanguage
-				)
-			)
-				.map { converter.convertListData(it) }
-				.collect { news ->
-					_discoverUiState.update {
-						it.copy(healthNews = news)
-					}
-				}
-		}
-	}
-
-	private fun fetchScienceNews() {
-		viewModelScope.launch {
-			newsByCollectionUseCase.execute(
-				GetNewsByCollectionUseCase.Request(
-					collection = Collections.NewsByCategory,
-					category = CategoryModel.Science.category,
-					languageCode = selectedLanguage
-				)
-			)
-				.map { converter.convertListData(it) }
-				.collect { news ->
-					_discoverUiState.update {
-						it.copy(scienceNews = news)
-					}
-				}
-		}
-	}
-
-	private fun fetchSportsNews() {
-		viewModelScope.launch {
-			newsByCollectionUseCase.execute(
-				GetNewsByCollectionUseCase.Request(
-					collection = Collections.NewsByCategory,
-					category = CategoryModel.Sports.category,
-					languageCode = selectedLanguage
-				)
-			)
-				.map { converter.convertListData(it) }
-				.collect { news ->
-					_discoverUiState.update {
-						it.copy(sportsNews = news)
-					}
-				}
-		}
-	}
-
-	private fun fetchTechNews() {
-		viewModelScope.launch {
-			newsByCollectionUseCase.execute(
-				GetNewsByCollectionUseCase.Request(
-					collection = Collections.NewsByCategory,
-					category = CategoryModel.Technology.category,
-					languageCode = selectedLanguage
-				)
-			)
-				.map { converter.convertListData(it) }
-				.collect { news ->
-					_discoverUiState.update {
-						it.copy(techNews = news)
+						it.copy(newsII = news)
 					}
 				}
 		}
@@ -180,12 +82,7 @@ class DiscoverViewModel : ViewModel(), KoinComponent {
 
 	fun retry() {
 		_discoverUiState.value = DiscoverUiState()
-		fetchAllNews()
-		fetchBusinessNews()
-		fetchEntertainmentNews()
-		fetchHealthNews()
-		fetchScienceNews()
-		fetchSportsNews()
-		fetchTechNews()
+		fetchNewsI()
+		fetchNewsII()
 	}
 }
