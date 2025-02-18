@@ -1,4 +1,4 @@
-package com.roland.android.worldbuzz.ui.components
+package com.roland.android.worldbuzz.utils
 
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.RepeatMode
@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.Color
 import coil.compose.AsyncImagePainter
 
 @Composable
-private fun ShimmerBoxItem(
+fun ShimmerBoxItem(
 	isLoading: Boolean,
 	modifier: Modifier = Modifier
 ) {
@@ -41,7 +41,7 @@ fun Modifier.painterPlaceholder(state: AsyncImagePainter.State): Modifier = comp
 	}
 }
 
-fun Modifier.shimmerModifier(isLoading: Boolean): Modifier = composed {
+private fun Modifier.shimmerModifier(isLoading: Boolean): Modifier = composed {
 	if (isLoading) {
 		background(rememberAnimatedShimmerBrush())
 	} else {

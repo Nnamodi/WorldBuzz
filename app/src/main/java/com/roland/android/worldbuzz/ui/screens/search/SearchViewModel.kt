@@ -11,6 +11,7 @@ import com.roland.android.domain.repository.SettingsRepository
 import com.roland.android.domain.usecase.GetNewsBySearchUseCase
 import com.roland.android.worldbuzz.data.ResponseConverter
 import com.roland.android.worldbuzz.data.State
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -21,7 +22,7 @@ class SearchViewModel : ViewModel(), KoinComponent {
 	private val settingsRepository by inject<SettingsRepository>()
 	private val converter by inject<ResponseConverter>()
 
-	var searchArticles: State<PagingData<Article>>? = null; private set
+	var searchArticles: State<MutableStateFlow<PagingData<Article>>>? = null; private set
 	private var selectedLanguage by mutableStateOf("")
 	private var searchPref by mutableStateOf(SearchPref())
 

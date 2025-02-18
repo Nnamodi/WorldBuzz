@@ -8,4 +8,9 @@
     <string name="save">Save</string>
     <string name="unsave">Unsave</string>
     <string name="more">More</string>
+    <string name="trending">Trending</string>
+    <string name="retry">Retry</string>
+    <string name="recommended">Recommended</string>
+    <string name="author">By %1$s</string>
+    <string name="search_placeholder">Find interesting news</string>
 </resources>

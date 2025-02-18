@@ -12,6 +12,7 @@ import com.roland.android.domain.repository.UtilityRepository
 import com.roland.android.domain.usecase.Collections
 import com.roland.android.domain.usecase.GetNewsByCollectionUseCase
 import com.roland.android.worldbuzz.data.ResponseConverter
+import com.roland.android.worldbuzz.utils.Converters.refactor
 import com.roland.android.worldbuzz.utils.Converters.toArticle
 import com.roland.android.worldbuzz.utils.Converters.update
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -81,7 +82,7 @@ class DetailsViewModel : ViewModel(), KoinComponent {
 	private fun fetchSavedArticles() {
 		viewModelScope.launch {
 			newsRepository.fetchSavedArticles().collect { articles ->
-				_detailsUiState.update { it.copy(savedArticles = articles) }
+				_detailsUiState.update { it.copy(savedArticles = articles.refactor()) }
 			}
 		}
 	}

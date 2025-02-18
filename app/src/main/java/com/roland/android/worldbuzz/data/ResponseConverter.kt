@@ -10,6 +10,8 @@ import com.roland.android.domain.usecase.GetNewsUseCase
 import com.roland.android.worldbuzz.ui.screens.discover.DiscoverModelI
 import com.roland.android.worldbuzz.ui.screens.discover.DiscoverModelII
 import com.roland.android.worldbuzz.ui.screens.home.HomeModel
+import com.roland.android.worldbuzz.utils.Converters.refactor
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class ResponseConverter {
 	fun convertHomeData(result: Result<GetNewsUseCase.Response>): State<HomeModel> {
@@ -28,10 +30,10 @@ class ResponseConverter {
 		}
 	}
 
-	fun convertListData(result: Result<GetNewsByCollectionUseCase.Response>): State<PagingData<Article>> {
+	fun convertListData(result: Result<GetNewsByCollectionUseCase.Response>): State<MutableStateFlow<PagingData<Article>>> {
 		return when (result) {
 			is Result.Error -> State.Error(result.exception.localizedMessage.orEmpty())
-			is Result.Success -> State.Success(result.data.articles)
+			is Result.Success -> State.Success(result.data.articles.refactor())
 		}
 	}
 
@@ -40,10 +42,10 @@ class ResponseConverter {
 			is Result.Error -> State.Error(result.exception.localizedMessage.orEmpty())
 			is Result.Success -> State.Success(
 				DiscoverModelI(
-					result.data.allNews,
-					result.data.businessNews,
-					result.data.entertainmentNews,
-					result.data.healthNews
+					result.data.allNews.refactor(),
+					result.data.businessNews.refactor(),
+					result.data.entertainmentNews.refactor(),
+					result.data.healthNews.refactor()
 				)
 			)
 		}
@@ -54,18 +56,18 @@ class ResponseConverter {
 			is Result.Error -> State.Error(result.exception.localizedMessage.orEmpty())
 			is Result.Success -> State.Success(
 				DiscoverModelII(
-					result.data.scienceNews,
-					result.data.sportsNews,
-					result.data.techNews
+					result.data.scienceNews.refactor(),
+					result.data.sportsNews.refactor(),
+					result.data.techNews.refactor()
 				)
 			)
 		}
 	}
 
-	fun convertSearchData(result: Result<GetNewsBySearchUseCase.Response>): State<PagingData<Article>> {
+	fun convertSearchData(result: Result<GetNewsBySearchUseCase.Response>): State<MutableStateFlow<PagingData<Article>>> {
 		return when (result) {
 			is Result.Error -> State.Error(result.exception.localizedMessage.orEmpty())
-			is Result.Success -> State.Success(result.data.articles)
+			is Result.Success -> State.Success(result.data.articles.refactor())
 		}
 	}
 }

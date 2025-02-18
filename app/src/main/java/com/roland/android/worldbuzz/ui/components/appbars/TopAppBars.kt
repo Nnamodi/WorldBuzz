@@ -13,6 +13,7 @@ import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import com.roland.android.worldbuzz.R
 import com.roland.android.worldbuzz.ui.navigation.Screens
 
@@ -24,7 +25,7 @@ fun TopAppBar(
 	navigate: (Screens) -> Unit = {}
 ) {
 	CenterAlignedTopAppBar(
-		title = { Text(text = title) },
+		title = { Text(text = title, fontWeight = FontWeight.Bold) },
 		navigationIcon = {
 			if (canGoBack) {
 				IconButton(onClick = { navigate(Screens.Back) }) {

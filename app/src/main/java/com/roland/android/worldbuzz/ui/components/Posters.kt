@@ -1,5 +1,6 @@
 package com.roland.android.worldbuzz.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -26,16 +28,19 @@ import coil.compose.AsyncImagePainter
 import coil.compose.AsyncImagePainter.State.Empty
 import coil.request.ImageRequest
 import com.roland.android.domain.model.Article
+import com.roland.android.worldbuzz.utils.painterPlaceholder
 
 @Composable
 fun PagerPoster(
 	article: Article,
-	modifier: Modifier = Modifier
+	modifier: Modifier = Modifier,
+	onClick: () -> Unit
 ) {
 	Box(
 		modifier = modifier
 			.fillMaxWidth()
 			.height(230.dp)
+			.clickable { onClick() }
 	) {
 		Poster(
 			model = article.imageUrl,
@@ -46,10 +51,11 @@ fun PagerPoster(
 			text = article.title,
 			modifier = Modifier
 				.align(Alignment.BottomStart)
-				.padding(10.dp),
+				.padding(20.dp),
 			color = Color.White,
 			fontSize = 20.sp,
-			fontWeight = FontWeight.SemiBold
+			fontWeight = FontWeight.SemiBold,
+			overflow = TextOverflow.Ellipsis
 		)
 	}
 }
@@ -69,16 +75,14 @@ fun DetailsPoster(
 }
 
 @Composable
-fun ListPosters(
+fun ListPoster(
 	article: Article,
 	modifier: Modifier = Modifier
 ) {
 	Poster(
 		model = article.imageUrl,
 		contentDescription = article.title,
-		modifier = modifier
-			.padding(end = 12.dp)
-			.size(120.dp, 160.dp)
+		modifier = modifier.size(120.dp, 130.dp)
 	)
 }
 
