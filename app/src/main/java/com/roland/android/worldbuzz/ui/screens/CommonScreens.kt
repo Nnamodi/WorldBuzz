@@ -33,6 +33,24 @@ fun <T: Any>CommonScreen(
 }
 
 @Composable
+fun <T: Any, T2: Any>CommonScreen(
+	state: State<T>?,
+	state2: State<T2>?,
+	paddingValues: PaddingValues = PaddingValues(0.dp),
+	loadingScreen: @Composable (String?) -> Unit,
+	successScreen: @Composable (T, T2) -> Unit
+) {
+	Box(Modifier.padding(paddingValues)) {
+		when {
+			(state == null) || (state2 == null) -> loadingScreen(null)
+			state is State.Error -> loadingScreen(state.errorMessage)
+			state2 is State.Error -> loadingScreen(state2.errorMessage)
+			(state is State.Success) && (state2 is State.Success) -> successScreen(state.data, state2.data)
+		}
+	}
+}
+
+@Composable
 fun CommonScaffold(
 	modifier: Modifier = Modifier,
 	topBar: @Composable () -> Unit = {},

@@ -13,6 +13,7 @@ import com.roland.android.domain.usecase.Collections
 import com.roland.android.domain.usecase.GetNewsByCollectionUseCase
 import com.roland.android.worldbuzz.data.ResponseConverter
 import com.roland.android.worldbuzz.data.State
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -24,7 +25,7 @@ class ListViewModel : ViewModel(), KoinComponent {
 	private val utilityRepository by inject<UtilityRepository>()
 	private val converter by inject<ResponseConverter>()
 
-	var articles: State<PagingData<Article>>? = null; private set
+	var articles: State<MutableStateFlow<PagingData<Article>>>? = null; private set
 	private var selectedLanguage by mutableStateOf("")
 	private var collectionDetails by mutableStateOf(CollectionDetails())
 
