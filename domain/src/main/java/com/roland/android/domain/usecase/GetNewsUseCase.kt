@@ -2,6 +2,7 @@ package com.roland.android.domain.usecase
 
 import com.roland.android.domain.model.Article
 import com.roland.android.domain.model.CategoryModel
+import com.roland.android.domain.model.Source
 import com.roland.android.domain.repository.NewsRepository
 import com.roland.android.domain.util.Constant.SEPARATOR
 import kotlinx.coroutines.flow.Flow
@@ -15,7 +16,7 @@ class GetNewsUseCase(
 	override fun process(request: Request): Flow<Response> = combine(
 		newsRepository.fetchTrendingNews(
 			request.categoryModels.map { it.category }.joinToString { SEPARATOR },
-			request.sources,
+			request.sources.map { it.name }.joinToString { SEPARATOR },
 			request.languageCode
 		),
 		newsRepository.fetchRecommendedNews(
@@ -28,7 +29,7 @@ class GetNewsUseCase(
 
 	data class Request(
 		val categoryModels: List<CategoryModel>,
-		val sources: String,
+		val sources: List<Source>,
 		val languageCode: String
 	) : UseCase.Request
 

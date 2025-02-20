@@ -19,8 +19,8 @@ class SettingsStore(
 ) {
 	fun getSelectedLanguage(): Flow<LanguageModel> {
 		return datastore.data.map { pref ->
-//			val languageCode = pref[LANGUAGE_KEY] ?: LanguageModel.English.code
-			LanguageModel.English//(languageCode)
+			val languageCode = pref[LANGUAGE_KEY] ?: LanguageModel.English.name
+			LanguageModel.valueOf(languageCode)
 		}
 	}
 

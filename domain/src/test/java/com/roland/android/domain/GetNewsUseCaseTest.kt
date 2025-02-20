@@ -29,7 +29,7 @@ class GetNewsUseCaseTest {
 		val response = newsUseCase.process(
 			GetNewsUseCase.Request(
 				categoryModels = CategoryModel.entries,
-				sources = "",
+				sources = emptyList(),
 				languageCode = LanguageModel.French.code
 			)
 		).first()

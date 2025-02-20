@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,7 +24,11 @@ fun ListLoadingUi(
 	isLoading: Boolean,
 	modifier: Modifier = Modifier
 ) {
-	Column(modifier.fillMaxSize()) {
+	Column(
+		modifier = modifier
+			.fillMaxSize()
+			.verticalScroll(rememberScrollState())
+	) {
 		repeat(10) {
 			ListLoadingItem(isLoading)
 		}

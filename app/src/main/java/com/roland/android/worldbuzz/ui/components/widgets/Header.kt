@@ -23,6 +23,7 @@ import com.roland.android.worldbuzz.R
 fun Header(
 	header: String,
 	modifier: Modifier,
+	isLoadingUi: Boolean = false,
 	onSeeMoreClick: () -> Unit
 ) {
 	Row(
@@ -43,14 +44,16 @@ fun Header(
 			fontSize = 20.sp
 		)
 		Spacer(Modifier.weight(1f))
-		Text(
-			text = stringResource(R.string.more),
-			modifier = Modifier
-				.padding(horizontal = 4.dp)
-				.clickable { onSeeMoreClick() },
-			color = MaterialTheme.colorScheme.surfaceTint,
-			fontWeight = FontWeight.Bold,
-			fontSize = 16.sp
-		)
+		if (!isLoadingUi) {
+			Text(
+				text = stringResource(R.string.more),
+				modifier = Modifier
+					.padding(horizontal = 4.dp)
+					.clickable { onSeeMoreClick() },
+				color = MaterialTheme.colorScheme.surfaceTint,
+				fontWeight = FontWeight.Bold,
+				fontSize = 16.sp
+			)
+		}
 	}
 }
