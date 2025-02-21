@@ -13,4 +13,6 @@
     <string name="recommended">Recommended</string>
     <string name="author">By %1$s</string>
     <string name="search_placeholder">Find interesting news</string>
+    <string name="reading_history">Reading History</string>
+    <string name="saved_articles">Saved Articles</string>
 </resources>

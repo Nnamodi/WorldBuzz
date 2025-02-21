@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.roland.android.domain.model.Article
+import com.roland.android.domain.usecase.Collections
 import com.roland.android.worldbuzz.R
 import com.roland.android.worldbuzz.data.State
 import com.roland.android.worldbuzz.data.sampleNewsData
@@ -41,6 +42,7 @@ import com.roland.android.worldbuzz.ui.components.widgets.SnackbarDuration
 import com.roland.android.worldbuzz.ui.navigation.Screens
 import com.roland.android.worldbuzz.ui.screens.CommonScaffold
 import com.roland.android.worldbuzz.ui.screens.CommonScreen
+import com.roland.android.worldbuzz.ui.screens.list.CollectionDetails
 import com.roland.android.worldbuzz.utils.Constants.NavigationBarHeight
 import com.roland.android.worldbuzz.utils.Constants.PADDING_WIDTH
 import com.roland.android.worldbuzz.utils.Converters.toJson
@@ -67,7 +69,7 @@ fun HomeScreen(
 			state = uiState.breakingNews,
 			paddingValues = paddingValues,
 			loadingScreen = { error ->
-				HomeLoadingScreen(error)
+				HomeLoadingUi(error == null)
 				errorMessage.value = error
 			}
 		) { data ->
@@ -83,7 +85,10 @@ fun HomeScreen(
 					TrendingNewsPager(
 						trendingNews = data.trendingNews,
 						onItemClick = { navigate(Screens.DetailsScreen(it)) },
-						onSeeMoreClick = {}
+						onSeeMoreClick = {
+							val collectionDetails = CollectionDetails(Collections.TrendingNews.name)
+							navigate(Screens.ListScreen(collectionDetails.toJson()))
+						}
 					)
 				}
 				item {
@@ -92,7 +97,10 @@ fun HomeScreen(
 						modifier = Modifier
 							.fillMaxWidth()
 							.padding(PADDING_WIDTH),
-						onSeeMoreClick = {}
+						onSeeMoreClick = {
+							val collectionDetails = CollectionDetails(Collections.TrendingNews.name)
+							navigate(Screens.ListScreen(collectionDetails.toJson()))
+						}
 					)
 				}
 				RecommendedNews(
@@ -197,8 +205,11 @@ private fun LazyListScope.RecommendedNews(
 @Composable
 private fun HomeScreenPreview() {
 	MaterialTheme {
+		val successState = State.Success(HomeModel(sampleNewsData, sampleNewsData))
+//		val errorState = State.Error<HomeModel>("Broken Connection!")
+
 		HomeScreen(
-			uiState = HomeUiState(State.Success(HomeModel(sampleNewsData, sampleNewsData))),
+			uiState = HomeUiState(successState),
 			retry = {},
 			navigate = {}
 		)

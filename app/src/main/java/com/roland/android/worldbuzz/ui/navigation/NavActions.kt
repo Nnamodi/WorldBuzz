@@ -10,7 +10,7 @@ class NavActions(private val navController: NavHostController) {
 			Screens.ProfileScreen -> navigateToProfileScreen()
 			is Screens.DetailsScreen -> navigateToDetailsScreen(screen.articleJson)
 			Screens.SearchScreen -> navigateToSearchScreen()
-			is Screens.ListScreen -> navigateToListScreen(screen.collection)
+			is Screens.ListScreen -> navigateToListScreen(screen.collectionJson)
 			Screens.CategoryScreen -> navigateToCategoryScreen()
 			Screens.SourcesScreen -> navigateToSourcesScreen()
 			Screens.SettingsScreen -> navigateToSettingsScreen()
@@ -40,9 +40,9 @@ class NavActions(private val navController: NavHostController) {
 		navController.navigate(AppRoute.SearchScreen.route)
 	}
 
-	private fun navigateToListScreen(collection: String) {
+	private fun navigateToListScreen(collectionJson: String) {
 		navController.navigate(
-			AppRoute.ListScreen.routeWithCollection(collection)
+			AppRoute.ListScreen.routeWithCollection(collectionJson)
 		)
 	}
 
@@ -68,7 +68,7 @@ sealed class AppRoute(val route: String) {
 	}
 	data object SearchScreen : AppRoute("search_screen")
 	data object ListScreen : AppRoute("list_screen/{collection}") {
-		fun routeWithCollection(collection: String) = String.format("list_screen/%s", collection)
+		fun routeWithCollection(collectionJson: String) = String.format("list_screen/%s", collectionJson)
 	}
 	data object CategoryScreen : AppRoute("category_screen")
 	data object SourcesScreen : AppRoute("sources_screen")
@@ -81,7 +81,7 @@ sealed class Screens {
 	data object ProfileScreen : Screens()
 	data class DetailsScreen(val articleJson: String) : Screens()
 	data object SearchScreen : Screens()
-	data class ListScreen(val collection: String) : Screens()
+	data class ListScreen(val collectionJson: String) : Screens()
 	data object CategoryScreen : Screens()
 	data object SourcesScreen : Screens()
 	data object SettingsScreen : Screens()

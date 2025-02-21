@@ -11,7 +11,6 @@ import com.roland.android.domain.model.Source
 import com.roland.android.domain.repository.NewsRepository
 import com.roland.android.domain.repository.SettingsRepository
 import com.roland.android.domain.usecase.GetNewsUseCase
-import com.roland.android.domain.util.Constant.SEPARATOR
 import com.roland.android.worldbuzz.data.ResponseConverter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -59,7 +58,7 @@ class HomeViewModel : ViewModel(), KoinComponent {
 		viewModelScope.launch {
 			val request = GetNewsUseCase.Request(
 				categoryModels = subscribedCategories,
-				sources = subscribedSources.map { it.name }.joinToString { SEPARATOR },
+				sources = subscribedSources,
 				languageCode = selectedLanguage
 			)
 			newsUseCase.execute(request)

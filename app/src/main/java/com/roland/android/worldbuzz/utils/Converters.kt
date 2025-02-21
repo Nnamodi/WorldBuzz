@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.roland.android.domain.model.Article
 import com.roland.android.domain.model.SourceDetail
+import com.roland.android.worldbuzz.ui.screens.list.CollectionDetails
 import kotlinx.coroutines.flow.MutableStateFlow
 
 object Converters {
@@ -16,6 +17,17 @@ object Converters {
 	fun String.toArticle(): Article {
 		val gson = Gson()
 		val type = object : TypeToken<Article>() {}.type
+		return gson.fromJson(this, type)
+	}
+
+	fun CollectionDetails.toJson(): String {
+		val gson = Gson()
+		return gson.toJson(this)
+	}
+
+	fun String.toCollectionDetails(): CollectionDetails {
+		val gson = Gson()
+		val type = object : TypeToken<CollectionDetails>() {}.type
 		return gson.fromJson(this, type)
 	}
 
