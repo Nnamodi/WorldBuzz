@@ -23,8 +23,8 @@ import com.roland.android.worldbuzz.R
 fun Header(
 	header: String,
 	modifier: Modifier,
-	isLoadingUi: Boolean = false,
-	onSeeMoreClick: () -> Unit
+	showSeeMore: Boolean = true,
+	onSeeMoreClick: () -> Unit = {}
 ) {
 	Row(
 		modifier = modifier,
@@ -44,7 +44,7 @@ fun Header(
 			fontSize = 20.sp
 		)
 		Spacer(Modifier.weight(1f))
-		if (!isLoadingUi) {
+		if (showSeeMore) {
 			Text(
 				text = stringResource(R.string.more),
 				modifier = Modifier

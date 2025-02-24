@@ -15,4 +15,11 @@
     <string name="search_placeholder">Find interesting news</string>
     <string name="reading_history">Reading History</string>
     <string name="saved_articles">Saved Articles</string>
+    <string name="selected">%1$s Selected</string>
+    <string name="unselected">%1$s Unselected</string>
+    <string name="filter">Filter search</string>
+    <string name="publishers">Publishers</string>
+    <string name="categories">Categories</string>
+    <string name="search">Search</string>
+    <string name="close">Close</string>
 </resources>

@@ -5,30 +5,52 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
-import com.roland.android.domain.model.Article
+import com.roland.android.domain.repository.NewsRepository
 import com.roland.android.domain.repository.SettingsRepository
 import com.roland.android.domain.usecase.GetNewsBySearchUseCase
 import com.roland.android.worldbuzz.data.ResponseConverter
-import com.roland.android.worldbuzz.data.State
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class SearchViewModel : ViewModel(), KoinComponent {
 	private val searchUseCase by inject<GetNewsBySearchUseCase>()
+	private val newsRepository by inject<NewsRepository>()
 	private val settingsRepository by inject<SettingsRepository>()
 	private val converter by inject<ResponseConverter>()
 
-	var searchArticles: State<MutableStateFlow<PagingData<Article>>>? = null; private set
+	private val _searchUiState = MutableStateFlow(SearchUiState())
+	var searchUiState by mutableStateOf(_searchUiState.value); private set
 	private var selectedLanguage by mutableStateOf("")
 	private var searchPref by mutableStateOf(SearchPref())
 
-	private fun getSelectedLanguage() {
+	init {
 		viewModelScope.launch {
-			settingsRepository.getSelectedLanguage().collect { language ->
+			_searchUiState.collect {
+				searchUiState = it
+			}
+		}
+	}
+
+	private fun fetchPrefs() {
+		viewModelScope.launch {
+			combine(
+				newsRepository.fetchSubscribedSources(),
+				newsRepository.fetchAllSources(),
+				settingsRepository.getSelectedLanguage()
+			) { sources, allSources, language ->
+				_searchUiState.update { state ->
+					val subscribedSources = allSources.filter { sourceDetail ->
+						sourceDetail.name in sources.map { it.name }
+					}
+					state.copy(
+						newsSources = (subscribedSources + allSources).take(12)
+					)
+				}
 				selectedLanguage = language.code
 			}
 		}
@@ -42,20 +64,27 @@ class SearchViewModel : ViewModel(), KoinComponent {
 	}
 
 	private fun onSearch(pref: SearchPref) {
-		getSelectedLanguage()
-		searchArticles = null
+		fetchPrefs()
+		_searchUiState.update { it.copy(
+			query = pref.query,
+			result = null,
+			selectedCategories = pref.categories,
+			selectedSources = pref.sources
+		) }
 		searchPref = pref
 		viewModelScope.launch {
 			searchUseCase.execute(
 				GetNewsBySearchUseCase.Request(
 					query = pref.query,
-					categories = pref.categories,
+					categories = pref.categories.map { it.category },
 					sources = pref.sources,
 					languageCode = selectedLanguage
 				)
 			)
 				.map { converter.convertSearchData(it) }
-				.collect { searchArticles = it }
+				.collect { articles ->
+					_searchUiState.update { it.copy(result = articles) }
+				}
 		}
 	}
 }
