@@ -29,7 +29,8 @@ fun HomeLoadingUi(isLoading: Boolean) {
 			Header(
 				header = stringResource(R.string.trending),
 				modifier = Modifier.padding(PADDING_WIDTH),
-				isLoadingUi = true) {}
+				showSeeMore = false
+			)
 		}
 		item {
 			ShimmerBoxItem(
@@ -45,8 +46,8 @@ fun HomeLoadingUi(isLoading: Boolean) {
 			Header(
 				header = stringResource(R.string.recommended),
 				modifier = Modifier.padding(PADDING_WIDTH),
-				isLoadingUi = true
-			) {}
+				showSeeMore = false
+			)
 		}
 		items(5) {
 			ListLoadingItem(isLoading = isLoading)
