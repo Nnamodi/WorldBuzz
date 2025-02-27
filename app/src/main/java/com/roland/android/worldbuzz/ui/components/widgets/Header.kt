@@ -22,6 +22,19 @@ import com.roland.android.worldbuzz.R
 @Composable
 fun Header(
 	header: String,
+	modifier: Modifier
+) {
+	Text(
+		text = header,
+		modifier = modifier.padding(4.dp, 8.dp),
+		fontWeight = FontWeight.Bold,
+		fontSize = 20.sp
+	)
+}
+
+@Composable
+fun Header(
+	header: String,
 	modifier: Modifier,
 	showSeeMore: Boolean = true,
 	onSeeMoreClick: () -> Unit = {}

@@ -74,7 +74,9 @@ fun SearchScreen(
 		}
 		SearchFilterSheet(
 			showSheet = openFilterSheet.value,
-			selectedCategories = selectedCategories,
+			searchQueryIsNotEmpty = query.isNotEmpty(),
+			resultsFetched = resultsFetched,
+			selectedCategory = selectedCategory,
 			selectedSources = selectedSources,
 			sourcesToSelect = newsSources,
 			paddingValues = paddingValues,
@@ -109,7 +111,7 @@ private fun SearchScreenPreview() {
 	MaterialTheme {
 		SearchScreen(
 			uiState = SearchUiState(
-				query = "sandbox",
+				query = "Nato",
 				result = State.Success(sampleNewsPagingData),
 				newsSources = sampleNewsSource
 			),

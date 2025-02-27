@@ -125,6 +125,7 @@ private fun Poster(
 fun SourceItem(
 	iconUrl: String,
 	name: String,
+	modifier: Modifier = Modifier,
 	selected: Boolean,
 	size: Dp = 80.dp,
 	onClick: () -> Unit
@@ -132,11 +133,11 @@ fun SourceItem(
 	val state = remember { mutableStateOf<AsyncImagePainter.State>(Empty) }
 
 	Box(
-		modifier = Modifier
+		modifier = modifier
+			.padding(horizontal = 10.dp)
 			.clip(CircleShape)
 			.size(size)
-			.clickable { onClick() }
-			.alpha(if (selected) 0.5f else 1f),
+			.clickable { onClick() },
 		contentAlignment = Alignment.Center
 	) {
 		AsyncImage(
@@ -144,18 +145,74 @@ fun SourceItem(
 			contentDescription = name,
 			modifier = Modifier
 				.fillMaxSize()
-				.painterPlaceholder(state.value),
+				.painterPlaceholder(state.value)
+				.alpha(if (selected) 0.5f else 1f),
 			onState = { state.value = it },
 			contentScale = ContentScale.Crop
 		)
 		if (selected) {
 			Icon(
-				imageVector = Icons.Rounded.Check,
+				imageVector = Icons.Rounded.CheckCircle,
 				contentDescription = stringResource(R.string.selected, name),
-				modifier = Modifier.size(40.dp),
-				tint = Color.Green
+				modifier = Modifier.size(24.dp),
+				tint = MaterialTheme.colorScheme.primary
 			)
 		}
+	}
+}
+
+@Composable
+fun CategoryItem(
+	icon: ImageVector,
+	name: String,
+	modifier: Modifier = Modifier,
+	selected: Boolean,
+	iconSize: Dp = 44.dp,
+	onClick: () -> Unit
+) {
+	Box(
+		modifier = modifier
+			.clip(MaterialTheme.shapes.medium)
+			.clickable { onClick() }
+			.padding(8.dp),
+		contentAlignment = Alignment.Center
+	) {
+		Column(
+			modifier = Modifier.alpha(if (selected) 0.5f else 1f),
+			verticalArrangement = Arrangement.Center,
+			horizontalAlignment = Alignment.CenterHorizontally
+		) {
+			Icon(
+				imageVector = icon,
+				contentDescription = name,
+				modifier = Modifier
+					.alpha(0.8f)
+					.size(iconSize)
+			)
+			Text(
+				text = name,
+				modifier = Modifier.padding(top = 12.dp),
+				overflow = TextOverflow.Ellipsis,
+				softWrap = false,
+				style = MaterialTheme.typography.bodyMedium
+			)
+		}
+		if (selected) {
+			Icon(
+				imageVector = Icons.Rounded.CheckCircle,
+				contentDescription = stringResource(R.string.selected, name),
+				modifier = Modifier.size(24.dp),
+				tint = MaterialTheme.colorScheme.primary
+			)
+		}
+	}
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CategoryItemPreview() {
+	MaterialTheme {
+		CategoryItem(icon = Icons.Rounded.SportsFootball, name = "Sports", selected = false) {}
 	}
 }
 

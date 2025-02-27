@@ -30,7 +30,10 @@ import com.roland.android.worldbuzz.R
 import com.roland.android.worldbuzz.ui.navigation.AppRoute
 
 @Composable
-fun NavBar(navController: NavHostController) {
+fun NavBar(
+	navController: NavHostController,
+	modifier: Modifier = Modifier
+) {
 	val navBackStackEntry = navController.currentBackStackEntryAsState()
 	val currentDestination = navBackStackEntry.value?.destination?.route
 	val currentlyInStartScreen = NavBarItems.entries.any {
@@ -53,37 +56,84 @@ fun NavBar(navController: NavHostController) {
 			initialOffsetY = { it }
 		),
 		exit = ExitTransition.None
-	) { BottomNavBar(navController) }
+	) { NavBarVisuals(navController, modifier) }
 }
 
+@SuppressLint("RestrictedApi")
 @Composable
-private fun BottomNavBar(navController: NavHostController) {
-	NavigationBar(
-		containerColor = NavigationBarDefaults.containerColor.copy(alpha = 0.9f)
+private fun NavBarVisuals(
+	navController: NavHostController,
+	modifier: Modifier = Modifier
+) {
+	val navBackStackEntry = navController.currentBackStackEntryAsState()
+	val currentRoute = navBackStackEntry.value?.destination?.route
+	val backStack = navController.currentBackStack.collectAsState().value.map { it.destination.route }
+
+	Row(
+		modifier = modifier
+			.fillMaxWidth()
+			.padding(16.dp)
+			.clip(MaterialTheme.shapes.large)
+			.background(NavigationBarDefaults.containerColor),
+		horizontalArrangement = Arrangement.Center,
+		verticalAlignment = Alignment.CenterVertically
 	) {
 		NavBarItems.entries.forEach { item ->
-			val navBackStackEntry = navController.currentBackStackEntryAsState()
-			val currentDestination = navBackStackEntry.value?.destination?.route
-			val selected = currentDestination == item.route
+			val inBackStack = item.route == currentRoute || item.route in backStack
+			val selected = when (item) {
+				NavBarItems.Home -> {
+					val noHomeScreenInStack = NavBarItems.entries.filter { it != NavBarItems.Home }
+						.all { it.route !in backStack }
+					inBackStack && noHomeScreenInStack
+				}
+				else -> inBackStack
+			}
 
 			NavigationBarItem(
 				selected = selected,
+				selectedIcon = item.selectedIcon,
+				unselectedIcon = item.unselectedIcon,
+				label = stringResource(item.title),
+				modifier = Modifier.weight(1f),
 				onClick = {
 					navController.navigate(item.route) {
 						popUpTo(navController.graph.findStartDestination().id) {
-							saveState = item.route != currentDestination
+							saveState = item.route != currentRoute
 						}
 						launchSingleTop = true
 						restoreState = true
 					}
-				},
-				icon = {
-					Icon(if (selected) item.selectedIcon else item.unselectedIcon, null)
-				},
-				label = { Text(stringResource(item.title)) },
-				alwaysShowLabel = true
+				}
 			)
 		}
+	}
+}
+
+@Composable
+private fun NavigationBarItem(
+	selected: Boolean,
+	selectedIcon: ImageVector,
+	unselectedIcon: ImageVector,
+	label: String,
+	modifier: Modifier = Modifier,
+	onClick: () -> Unit
+) {
+	val color = if (selected) colorScheme.primary else colorScheme.onBackground
+
+	Column(
+		modifier = modifier
+			.fillMaxWidth()
+			.clickable { onClick() }
+			.padding(vertical = 6.dp),
+		horizontalAlignment = Alignment.CenterHorizontally
+	) {
+		Icon(
+			imageVector = if (selected) selectedIcon else unselectedIcon,
+			contentDescription = label,
+			modifier = Modifier.padding(start = 12.5.dp, end = 12.5.dp, bottom = 4.dp),
+			tint = color
+		)
+		Text(text = label, color = color)
 	}
 }
 

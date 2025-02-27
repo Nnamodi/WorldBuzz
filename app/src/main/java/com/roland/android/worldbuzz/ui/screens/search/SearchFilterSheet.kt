@@ -47,7 +47,9 @@ typealias SelectedSources = List<String>
 @Composable
 fun SearchFilterSheet(
 	showSheet: Boolean,
-	selectedCategories: List<CategoryModel>,
+	searchQueryIsNotEmpty: Boolean,
+	resultsFetched: Boolean,
+	selectedCategory: CategoryModel?,
 	selectedSources: List<String>,
 	sourcesToSelect: List<SourceDetail>,
 	paddingValues: PaddingValues,
@@ -74,8 +76,7 @@ fun SearchFilterSheet(
 				item {
 					Header(
 						header = stringResource(R.string.publishers),
-						modifier = Modifier.padding(vertical = 12.dp),
-						showSeeMore = false
+						modifier = Modifier.padding(vertical = 12.dp)
 					)
 				}
 				item {
@@ -89,8 +90,7 @@ fun SearchFilterSheet(
 				item {
 					Header(
 						header = stringResource(R.string.categories),
-						modifier = Modifier.padding(vertical = 12.dp),
-						showSeeMore = false
+						modifier = Modifier.padding(vertical = 12.dp)
 					)
 				}
 				item {
@@ -101,28 +101,36 @@ fun SearchFilterSheet(
 					)
 				}
 			}
-			Button(
-				onClick = {
-					onApplyFilter(newCategoriesSelected, newSourcesSelected)
-					closeSheet()
-				},
-				modifier = Modifier
-					.fillMaxWidth()
-					.padding(50.dp, 24.dp),
-				shape = RoundedCornerShape(6.dp)
-			) {
-				val noFilters = (selectedCategories == newCategoriesSelected) && (selectedSources == newSourcesSelected)
-				Text(
-					text = stringResource(if (noFilters) R.string.close else R.string.search),
-					modifier = Modifier.padding(vertical = 6.dp),
-					style = MaterialTheme.typography.titleLarge
-				)
+			val noFilters = remember(newCategorySelected.value, newSourcesSelected) {
+				derivedStateOf {
+					(selectedCategory == newCategorySelected.value) && (selectedSources == newSourcesSelected)
+				}
+			}
+			if (!noFilters.value || searchQueryIsNotEmpty) {
+				Button(
+					onClick = {
+						if (!resultsFetched || !noFilters.value) {
+							onApplyFilter(newCategorySelected.value, newSourcesSelected)
+						}
+						closeSheet()
+					},
+					modifier = Modifier
+						.fillMaxWidth()
+						.padding(50.dp, 24.dp),
+					shape = MaterialTheme.shapes.small
+				) {
+					Text(
+						text = stringResource(if (resultsFetched && noFilters.value) R.string.close else R.string.search),
+						modifier = Modifier.padding(vertical = 6.dp),
+						style = MaterialTheme.typography.titleLarge
+					)
+				}
+			}
+
+			if (showSheet && resultsFetched) {
+				BackHandler { closeSheet() }
 			}
 		}
-	}
-
-	if (showSheet && (newCategoriesSelected.isNotEmpty() || newSourcesSelected.isNotEmpty())) {
-		BackHandler { closeSheet() }
 	}
 }
 
@@ -137,7 +145,7 @@ private fun SourceItems(
 	FlowRow(
 		modifier = Modifier
 			.fillMaxWidth()
-			.padding(bottom = 10.dp)
+			.padding(bottom = 12.dp)
 			.wrapContentHeight(align = Alignment.Top),
 		verticalArrangement = Arrangement.spacedBy(20.dp),
 		horizontalArrangement = Arrangement.SpaceBetween
@@ -169,11 +177,13 @@ private fun CategoryItems(
 		verticalArrangement = Arrangement.spacedBy(20.dp)
 	) {
 		CategoryModel.entries.forEach {
-			val selected = it in selectedCategories
-			FilterChip(
+			val selected = it == selectedCategory
+			CategoryItem(
+				icon = it.icon(),
+				name = it.category.capitalizeFirstLetter(),
+				modifier = Modifier.weight(1f),
 				selected = selected,
-				onClick = { if (selected) onUnselect(it) else onSelect(it) },
-				label = { Text(it.category) }
+				onClick = { if (selected) onUnselect(it) else onSelect(it) }
 			)
 		}
 	}
@@ -188,7 +198,9 @@ private fun SearchFilterSheetPreview() {
 		Surface(onClick = {showSheet = !showSheet}) {
 			SearchFilterSheet(
 				showSheet = showSheet,
-				selectedCategories = emptyList(),
+				searchQueryIsNotEmpty = true,
+				resultsFetched = false,
+				selectedCategory = null,
 				selectedSources = emptyList(),
 				sourcesToSelect = sampleNewsSource,
 				paddingValues = PaddingValues(),
