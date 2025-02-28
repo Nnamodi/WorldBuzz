@@ -4,6 +4,6 @@ import com.roland.android.domain.model.CategoryModel
 
 data class SearchPref(
 	val query: String = "",
-	val categories: List<CategoryModel> = emptyList(),
+	val category: CategoryModel? = null,
 	val sources: List<String> = emptyList()
 )

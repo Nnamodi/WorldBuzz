@@ -33,7 +33,7 @@ import com.roland.android.domain.model.Article
 import com.roland.android.worldbuzz.R
 import com.roland.android.worldbuzz.data.sampleNewsData
 import com.roland.android.worldbuzz.ui.components.ListPoster
-import com.roland.android.worldbuzz.ui.screens.list.ListLoadingUi
+import com.roland.android.worldbuzz.ui.screens.list.ListLoadingItem
 import com.roland.android.worldbuzz.utils.Constants.NavigationBarHeight
 import com.roland.android.worldbuzz.utils.Converters.toJson
 
@@ -61,10 +61,14 @@ fun ListItems(
 		articles.apply {
 			when (loadState.refresh) {
 				LoadState.Loading -> {
-					item { ListLoadingUi(isLoading = true) }
+					items(10) {
+						ListLoadingItem(isLoading = true)
+					}
 				}
 				is LoadState.Error -> {
-					item { ListLoadingUi(isLoading = false) }
+					items(10) {
+						ListLoadingItem(isLoading = false)
+					}
 					val errorMessage = (loadState.refresh as LoadState.Error).error.localizedMessage
 					onLoadError(errorMessage)
 				}
@@ -91,17 +95,23 @@ fun ListItem(
 		verticalAlignment = Alignment.CenterVertically
 	) {
 		ListPoster(article)
-		Column(Modifier.padding(12.dp)) {
+		Column(
+			modifier = Modifier.padding(12.dp),
+			verticalArrangement = Arrangement.SpaceBetween
+		) {
 			Text(
 				text = article.source.name,
 				modifier = Modifier.alpha(0.5f),
+				overflow = TextOverflow.Ellipsis,
+				softWrap = false,
 				style = MaterialTheme.typography.labelLarge
 			)
 			Text(
 				text = article.title,
-				modifier = Modifier.weight(1f),
+				modifier = Modifier.padding(vertical = 4.dp),
+				maxLines = 3,
 				overflow = TextOverflow.Ellipsis,
-				style = MaterialTheme.typography.titleLarge
+				style = MaterialTheme.typography.titleMedium
 			)
 			Row(
 				modifier = Modifier
@@ -112,11 +122,13 @@ fun ListItem(
 				Text(
 					text = stringResource(R.string.author, article.author),
 					overflow = TextOverflow.Ellipsis,
+					softWrap = false,
 					style = MaterialTheme.typography.labelLarge
 				)
 				DotSeparator()
 				Text(
 					text = article.publishedAt,
+					softWrap = false,
 					style = MaterialTheme.typography.labelLarge
 				)
 			}

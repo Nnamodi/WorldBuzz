@@ -16,13 +16,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,11 +36,13 @@ import com.roland.android.domain.model.CategoryModel
 import com.roland.android.domain.model.SourceDetail
 import com.roland.android.worldbuzz.R
 import com.roland.android.worldbuzz.data.sampleNewsSource
+import com.roland.android.worldbuzz.ui.components.CategoryItem
 import com.roland.android.worldbuzz.ui.components.SourceItem
 import com.roland.android.worldbuzz.ui.components.widgets.Header
 import com.roland.android.worldbuzz.utils.Constants.PADDING_WIDTH
+import com.roland.android.worldbuzz.utils.Converters.capitalizeFirstLetter
+import com.roland.android.worldbuzz.utils.Extensions.icon
 
-typealias SelectedCategories = List<CategoryModel>
 typealias SelectedSources = List<String>
 
 @Composable
@@ -53,10 +54,10 @@ fun SearchFilterSheet(
 	selectedSources: List<String>,
 	sourcesToSelect: List<SourceDetail>,
 	paddingValues: PaddingValues,
-	onApplyFilter: (SelectedCategories, SelectedSources) -> Unit,
+	onApplyFilter: (CategoryModel?, SelectedSources) -> Unit,
 	closeSheet: () -> Unit
 ) {
-	val newCategoriesSelected = remember { selectedCategories.toMutableStateList() }
+	val newCategorySelected = remember { mutableStateOf(selectedCategory) }
 	val newSourcesSelected = remember { selectedSources.toMutableStateList() }
 
 	AnimatedVisibility(
@@ -95,9 +96,9 @@ fun SearchFilterSheet(
 				}
 				item {
 					CategoryItems(
-						selectedCategories = newCategoriesSelected,
-						onSelect = { newCategoriesSelected.add(it) },
-						onUnselect = { newCategoriesSelected.remove(it) }
+						selectedCategory = newCategorySelected.value,
+						onSelect = { newCategorySelected.value = it },
+						onUnselect = { newCategorySelected.value = null }
 					)
 				}
 			}
@@ -165,7 +166,7 @@ private fun SourceItems(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun CategoryItems(
-	selectedCategories: List<CategoryModel>,
+	selectedCategory: CategoryModel?,
 	onSelect: (CategoryModel) -> Unit,
 	onUnselect: (CategoryModel) -> Unit
 ) {

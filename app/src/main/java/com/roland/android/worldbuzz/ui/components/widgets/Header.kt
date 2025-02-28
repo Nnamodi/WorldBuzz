@@ -61,8 +61,9 @@ fun Header(
 			Text(
 				text = stringResource(R.string.more),
 				modifier = Modifier
-					.padding(horizontal = 4.dp)
-					.clickable { onSeeMoreClick() },
+					.clip(MaterialTheme.shapes.medium)
+					.clickable { onSeeMoreClick() }
+					.padding(4.dp),
 				color = MaterialTheme.colorScheme.surfaceTint,
 				fontWeight = FontWeight.Bold,
 				fontSize = 16.sp

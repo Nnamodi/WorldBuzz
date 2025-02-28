@@ -31,19 +31,21 @@ fun SearchScreen(
 	action: (SearchActions) -> Unit,
 	navigate: (Screens) -> Unit
 ) {
-	val (query, result, newsSources, selectedCategories, selectedSources) = uiState
+	val (query, result, newsSources, selectedCategory, selectedSources) = uiState
 	val errorMessage = rememberSaveable { mutableStateOf<String?>(null) }
 	var newQuery by rememberSaveable { mutableStateOf(query) }
-	var newCategoriesSelected = remember { selectedCategories.toMutableStateList() }
+	val newCategorySelected = remember { mutableStateOf(selectedCategory) }
 	var newSourcesSelected = remember { selectedSources.toMutableStateList() }
+	var resultsFetched by remember { mutableStateOf(false) }
 	val openFilterSheet = rememberSaveable { mutableStateOf(
 		query.isEmpty()
-				&& selectedCategories.isEmpty()
+				&& selectedCategory == null
 				&& selectedSources.isEmpty()
 	) }
 	val onSearch = remember { {
-		val pref = SearchPref(newQuery.trim(), newCategoriesSelected, newSourcesSelected)
+		val pref = SearchPref(newQuery.trim(), newCategorySelected.value, newSourcesSelected)
 		action(SearchActions.Search(pref))
+		openFilterSheet.value = false
 	} }
 
 	CommonScaffold(
@@ -64,6 +66,7 @@ fun SearchScreen(
 			loadingScreen = { error ->
 				ListLoadingUi(isLoading = error == null)
 				errorMessage.value = error
+				resultsFetched = false
 			}
 		) { articles ->
 			ListItems(
@@ -71,6 +74,7 @@ fun SearchScreen(
 				onItemClick = { navigate(Screens.DetailsScreen(it)) },
 				onLoadError = { errorMessage.value = it }
 			)
+			resultsFetched = true
 		}
 		SearchFilterSheet(
 			showSheet = openFilterSheet.value,
@@ -81,7 +85,7 @@ fun SearchScreen(
 			sourcesToSelect = newsSources,
 			paddingValues = paddingValues,
 			onApplyFilter = { categories, sources ->
-				newCategoriesSelected = categories.toMutableStateList()
+				newCategorySelected.value = categories
 				newSourcesSelected = sources.toMutableStateList()
 				onSearch()
 			},
@@ -94,7 +98,7 @@ fun SearchScreen(
 				paddingValues = paddingValues,
 				actionLabel = stringResource(R.string.retry),
 				action = { action(SearchActions.Retry) },
-				duration = SnackbarDuration.Indefinite
+				duration = SnackbarDuration.Long
 			)
 		}
 

@@ -13,7 +13,6 @@ import com.roland.android.domain.repository.SettingsRepository
 import com.roland.android.domain.usecase.GetNewsUseCase
 import com.roland.android.worldbuzz.data.ResponseConverter
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -33,23 +32,38 @@ class HomeViewModel : ViewModel(), KoinComponent {
 	private var selectedLanguage by mutableStateOf("")
 
 	init {
-		fetchPrefs()
-		fetchNews()
+		fetchSubscribedCategories()
+		fetchSubscribedSources()
+		fetchSelectedLanguage()
+//		fetchNews()
 		viewModelScope.launch {
 			_homeUiState.collect { homeUiState = it }
 		}
 	}
 
-	private fun fetchPrefs() {
+	private fun fetchSubscribedCategories() {
 		viewModelScope.launch {
-			combine(
-				newsRepository.fetchSubscribedCategories(),
-				newsRepository.fetchSubscribedSources(),
-				settingsRepository.getSelectedLanguage()
-			) { categories, sources, language ->
-				subscribedCategories = categories
-				subscribedSources = sources
-				selectedLanguage = language.code
+			newsRepository.fetchSubscribedCategories().collect {
+				subscribedCategories = it
+				Log.i("HomeUiData", "Categories: $subscribedCategories")
+			}
+		}
+	}
+
+	private fun fetchSubscribedSources() {
+		viewModelScope.launch {
+			newsRepository.fetchSubscribedSources().collect {
+				subscribedSources = it
+				Log.i("HomeUiData", "Sources: $subscribedSources")
+			}
+		}
+	}
+
+	private fun fetchSelectedLanguage() {
+		viewModelScope.launch {
+			settingsRepository.getSelectedLanguage().collect {
+				selectedLanguage = it.code
+				Log.i("HomeUiData", "Language: $selectedLanguage")
 			}
 		}
 	}

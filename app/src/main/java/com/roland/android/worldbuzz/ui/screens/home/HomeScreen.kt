@@ -3,6 +3,7 @@ package com.roland.android.worldbuzz.ui.screens.home
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -74,11 +75,8 @@ fun HomeScreen(
 			}
 		) { data ->
 			LazyColumn(
-				modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding()),
-				contentPadding = PaddingValues(
-//					top = paddingValues.calculateTopPadding(),
-					bottom = 50.dp + NavigationBarHeight
-				),
+				modifier = Modifier.fillMaxSize(),
+				contentPadding = PaddingValues(bottom = 50.dp + NavigationBarHeight),
 				horizontalAlignment = Alignment.CenterHorizontally
 			) {
 				item {

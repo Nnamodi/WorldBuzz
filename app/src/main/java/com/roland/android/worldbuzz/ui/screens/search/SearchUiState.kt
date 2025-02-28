@@ -11,6 +11,6 @@ data class SearchUiState(
 	val query: String = "",
 	val result: State<MutableStateFlow<PagingData<Article>>>? = null,
 	val newsSources: List<SourceDetail> = emptyList(),
-	val selectedCategories: List<CategoryModel> = emptyList(),
+	val selectedCategory: CategoryModel? = null,
 	val selectedSources: List<String> = emptyList()
 )
