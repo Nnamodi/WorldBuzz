@@ -31,9 +31,9 @@ class NavActions(private val navController: NavHostController) {
 	}
 
 	private fun navigateToDetailsScreen(articleJson: String) {
-		navController.navigate(
-			AppRoute.DetailsScreen.routeWithArticle(articleJson)
-		)
+//		navController.navigate(
+//			AppRoute.DetailsScreen.routeWithArticle(articleJson)
+//		)
 	}
 
 	private fun navigateToSearchScreen() {
@@ -47,19 +47,20 @@ class NavActions(private val navController: NavHostController) {
 	}
 
 	private fun navigateToCategoryScreen() {
-		navController.navigate(AppRoute.CategoryScreen.route)
+//		navController.navigate(AppRoute.CategoryScreen.route)
 	}
 
 	private fun navigateToSourcesScreen() {
-		navController.navigate(AppRoute.SourcesScreen.route)
+//		navController.navigate(AppRoute.SourcesScreen.route)
 	}
 
 	private fun navigateToSettingsScreen() {
-		navController.navigate(AppRoute.SettingsScreen.route)
+//		navController.navigate(AppRoute.SettingsScreen.route)
 	}
 }
 
 sealed class AppRoute(val route: String) {
+	data object StartScreens : AppRoute("start_screens")
 	data object HomeScreen : AppRoute("home_screen")
 	data object DiscoverScreen : AppRoute("discover_screen")
 	data object ProfileScreen : AppRoute("profile_screen")

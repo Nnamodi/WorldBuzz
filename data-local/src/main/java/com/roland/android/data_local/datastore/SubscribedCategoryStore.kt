@@ -16,7 +16,7 @@ class SubscribedCategoryStore(
 ) {
 	fun getSubscribedCategories(): Flow<List<CategoryModel>> {
 		return datastore.data.map { pref ->
-			val categoryName = pref[SUBSCRIBED_CATEGORY_KEY] ?: ""
+			val categoryName = pref[SUBSCRIBED_CATEGORY_KEY] ?: CategoryModel.All.name
 			categoryName.split(SEPARATOR).map { name ->
 				CategoryModel.valueOf(name)
 			}
