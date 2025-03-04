@@ -2,6 +2,7 @@ package com.roland.android.data_remote
 
 import com.roland.android.data_remote.data_source.RemoteNewsDataSourceImpl
 import com.roland.android.data_remote.network.service.NewsService
+import com.roland.android.domain.model.CountryModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -45,14 +46,14 @@ class RemoteNewsDataSourceImplTest {
 
 	@Test
 	fun testSearchNews() = runTest {
-		whenever(newsService.searchNews("news", "", "", "", "us", apiKey, 3)).thenReturn(remoteNewsList)
-		val remoteData = remoteNewsDataSource.searchNews("", "", "", "", 3)
+		whenever(newsService.searchNews("news", "", "", "us", apiKey, 3)).thenReturn(remoteNewsList)
+		val remoteData = remoteNewsDataSource.searchNews("", "", "", 3)
 		assertEquals(remoteData, expectedNewsData)
 	}
 
 	@Test
 	fun testFetchAllSources() = runTest {
-		whenever(newsService.fetchAllSources("us", apiKey)).thenReturn(remoteNewsSourcesList)
+		whenever(newsService.fetchAllSources("us", CountryModel.USA.code, apiKey)).thenReturn(remoteNewsSourcesList)
 		val remoteData = remoteNewsDataSource.fetchAllSources().first()
 		assertEquals(remoteData, expectedNewsSources)
 	}

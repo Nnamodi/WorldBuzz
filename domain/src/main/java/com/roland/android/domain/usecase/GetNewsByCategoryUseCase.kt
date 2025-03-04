@@ -36,7 +36,7 @@ class GetNewsByCategoryUseCase(
 					newsRepository.fetchNewsByCategory(Sports.category, request.languageCode),
 					newsRepository.fetchNewsByCategory(Technology.category, request.languageCode)
 				) { science, sports, tech ->
-					Response(science, sports, tech)
+					Response(scienceNews = science, sportsNews = sports, techNews = tech)
 				}
 			}
 		}

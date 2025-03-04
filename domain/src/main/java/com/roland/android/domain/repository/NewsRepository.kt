@@ -32,9 +32,8 @@ interface NewsRepository {
 
 	fun searchNews(
 		query: String,
-		categories: String = "",
-		sources: String = "",
-		languageCode: String
+		category: String = "",
+		sources: String = ""
 	): Flow<PagingData<Article>>
 
 	fun fetchAllSources(): Flow<List<SourceDetail>>

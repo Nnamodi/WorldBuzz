@@ -15,18 +15,16 @@ class GetNewsBySearchUseCase(
 	override fun process(request: Request): Flow<Response> {
 		return newsRepository.searchNews(
 			query = request.query,
-			categories = request.categories.joinToString { SEPARATOR },
-			sources = request.sources.joinToString { SEPARATOR },
-			languageCode = request.languageCode
+			category = request.category,
+			sources = request.sources.joinToString { SEPARATOR }
 		)
 			.map { Response(it) }
 	}
 
 	data class Request(
 		val query: String,
-		val categories: List<String>,
-		val sources: List<String>,
-		val languageCode: String
+		val category: String,
+		val sources: List<String>
 	) : UseCase.Request
 
 	data class Response(val articles: PagingData<Article>) : UseCase.Response

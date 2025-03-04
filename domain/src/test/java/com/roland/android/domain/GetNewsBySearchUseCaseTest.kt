@@ -1,6 +1,5 @@
 package com.roland.android.domain
 
-import com.roland.android.domain.model.LanguageModel
 import com.roland.android.domain.repository.NewsRepository
 import com.roland.android.domain.usecase.GetNewsBySearchUseCase
 import junit.framework.TestCase.assertEquals
@@ -19,15 +18,14 @@ class GetNewsBySearchUseCaseTest {
 	@Test
 	fun testProcess() = runTest {
 		whenever(
-			newsRepository.searchNews("fisherman", ",", ",", "fr")
+			newsRepository.searchNews("fisherman", ",", ",")
 		).thenReturn(flowOf(sampleNewsPagingData))
 
 		val response = newsBySearchUseCase.process(
 			GetNewsBySearchUseCase.Request(
 				query = "fisherman",
-				categories = listOf(""),
-				sources = listOf(""),
-				languageCode = LanguageModel.French.code
+				category = "",
+				sources = listOf("")
 			)
 		).first()
 		assertEquals(

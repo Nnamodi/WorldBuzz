@@ -42,12 +42,11 @@ interface NewsService {
 		@Query("page") page: Int
 	): ArticleListModel
 
-	@GET("everything")
+	@GET("top-headlines")
 	suspend fun searchNews(
 		@Query("q") query: String = "",
-		@Query("category") categories: String = "",
+		@Query("category") category: String = "",
 		@Query("sources") sources: String = "",
-		@Query("language") languageCode: String,
 		@Query("country") country: String,
 		@Query("apiKey") apiKey: String,
 		@Query("page") page: Int
@@ -55,6 +54,7 @@ interface NewsService {
 
 	@GET("top-headlines/sources")
 	suspend fun fetchAllSources(
+		@Query("language") language: String,
 		@Query("country") country: String,
 		@Query("apiKey") apiKey: String
 	): SourceListModel

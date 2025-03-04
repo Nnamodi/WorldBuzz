@@ -91,17 +91,15 @@ class RemoteNewsDataSourceImpl(
 
 	override fun searchNews(
 		query: String,
-		categories: String,
+		category: String,
 		sources: String,
-		languageCode: String,
 		page: Int
 	): List<Article> = runBlocking {
 		async {
 			newsService.searchNews(
 				query = query,
-				categories = categories,
+				category = category,
 				sources = sources,
-				languageCode = languageCode,
 				country = CountryModel.USA.code,
 				apiKey = apiKey,
 				page = page
@@ -113,7 +111,7 @@ class RemoteNewsDataSourceImpl(
 	}
 
 	override fun fetchAllSources(): Flow<List<SourceDetail>> = flow {
-		emit(newsService.fetchAllSources(CountryModel.USA.code, apiKey).sources)
+		emit(newsService.fetchAllSources("en", CountryModel.USA.code, apiKey).sources)
 	}.map { sourceList ->
 		sourceList.map { sourceModel ->
 			convertToSourceDetail(sourceModel)

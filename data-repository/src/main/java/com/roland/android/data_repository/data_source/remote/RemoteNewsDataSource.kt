@@ -31,9 +31,8 @@ interface RemoteNewsDataSource {
 
 	fun searchNews(
 		query: String,
-		categories: String = "",
+		category: String = "",
 		sources: String = "",
-		languageCode: String,
 		page: Int
 	): List<Article>
 

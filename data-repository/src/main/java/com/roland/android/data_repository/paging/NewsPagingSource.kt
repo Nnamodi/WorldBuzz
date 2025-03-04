@@ -67,16 +67,15 @@ class NewsBySourcePagingSource(
 
 class SearchedNewsPagingSource(
 	private val query: String,
-	private val categories: String,
-	private val sources: String,
-	private val languageCode: String
+	private val category: String,
+	private val sources: String
 ) : PagingSource<Int, Article>(), KoinComponent {
 	private val remoteNewsDataSource by inject<RemoteNewsDataSource>()
 
 	override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Article> {
 		return try {
 			val currentPage = params.key ?: INITIAL_PAGE
-			val news = remoteNewsDataSource.searchNews(query, categories, sources, languageCode, currentPage)
+			val news = remoteNewsDataSource.searchNews(query, category, sources, currentPage)
 			LoadResult.Page(
 				data = news,
 				prevKey = if (currentPage == 1) null else currentPage - 1,

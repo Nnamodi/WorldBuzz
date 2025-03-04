@@ -1,5 +1,6 @@
 package com.roland.android.data_local.data_source
 
+import android.util.Log
 import com.roland.android.data_local.database.HistoryDao
 import com.roland.android.data_local.database.NewsDao
 import com.roland.android.data_local.database.SavedNewsDao
@@ -15,15 +16,18 @@ import com.roland.android.domain.model.Article
 import com.roland.android.domain.model.CategoryModel
 import com.roland.android.domain.model.Source
 import com.roland.android.domain.model.SourceDetail
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 class LocalNewsDataSourceImpl(
 	private val newsDao: NewsDao,
 	private val historyDao: HistoryDao,
 	private val savedNewsDao: SavedNewsDao,
 	private val sourceDao: SourceDao,
-	private val categoryStore: SubscribedCategoryStore
+	private val categoryStore: SubscribedCategoryStore,
+	private val scope: CoroutineScope
 ) : LocalNewsDataSource {
 	override fun fetchTrendingNews(categories: List<String>): Flow<List<Article>> {
 		val categoryList = categories.joinToString { SEPARATOR }
@@ -34,9 +38,11 @@ class LocalNewsDataSourceImpl(
 	}
 
 	override fun saveTrendingNews(categories: List<String>, news: List<Article>) {
-		val categoryList = categories.joinToString { SEPARATOR }
-		val trendingNews = news.map { it.convertToArticleEntity(categoryList) }
-		newsDao.saveTrendingNews(trendingNews)
+		scope.launch {
+			val categoryList = categories.joinToString { SEPARATOR }
+			val trendingNews = news.map { it.convertToArticleEntity(categoryList) }
+			newsDao.saveTrendingNews(trendingNews)
+		}
 	}
 
 	override fun fetchRecommendedNews(category: String): Flow<List<Article>> {
@@ -47,24 +53,31 @@ class LocalNewsDataSourceImpl(
 	}
 
 	override fun saveRecommendedNews(category: String, news: List<Article>) {
-		val recommendedNews = news.map { it.convertToArticleEntity(category) }
-		newsDao.saveRecommendedNews(recommendedNews)
+		scope.launch {
+			val recommendedNews = news.map { it.convertToArticleEntity(category) }
+			newsDao.saveRecommendedNews(recommendedNews)
+		}
 	}
 
 	override fun clearCachedNews() {
-		newsDao.clearCachedNews()
+		scope.launch {
+			newsDao.clearCachedNews()
+		}
 	}
 
 	override fun fetchAllSources(): Flow<List<SourceDetail>> {
 		return sourceDao.fetchAllSources()
 			.map { sourceDetailEntities ->
+				Log.i("SearchDataInfo", "Local: $sourceDetailEntities")
 				sourceDetailEntities.map { it.convertToSourceDetail() }
 			}
 	}
 
 	override fun saveAllSources(sources: List<SourceDetail>) {
-		val sourceEntities = sources.map { it.convertToSourceDetail() }
-		sourceDao.saveAllSources(sourceEntities)
+		scope.launch {
+			val sourceEntities = sources.map { it.convertToSourceDetail() }
+			sourceDao.saveAllSources(sourceEntities)
+		}
 	}
 
 	override fun fetchSourceDetails(source: Source): Flow<SourceDetail> {

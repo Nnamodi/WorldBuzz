@@ -61,7 +61,7 @@ object PersistenceModule {
 		single { provideSourceDao(get()) }
 		single { SettingsStore(get()) }
 		single { SubscribedCategoryStore(get()) }
-		factory<LocalNewsDataSource> { LocalNewsDataSourceImpl(get(), get(), get(), get(), get()) }
+		factory<LocalNewsDataSource> { LocalNewsDataSourceImpl(get(), get(), get(), get(), get(), get()) }
 		factory<SettingsDataSource> { SettingsDataSourceImpl(get()) }
 		factory<UtilityDataSource> { UtilityDataSourceImpl(get(), get(), get(), get()) }
 	}

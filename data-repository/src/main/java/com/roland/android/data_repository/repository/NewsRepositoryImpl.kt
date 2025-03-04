@@ -86,12 +86,11 @@ class NewsRepositoryImpl(
 
 	override fun searchNews(
 		query: String,
-		categories: String,
-		sources: String,
-		languageCode: String
+		category: String,
+		sources: String
 	): Flow<PagingData<Article>> {
 		return pagingDataFlow {
-			SearchedNewsPagingSource(query, categories, sources, languageCode)
+			SearchedNewsPagingSource(query, category, sources)
 		}
 	}
 
