@@ -51,6 +51,7 @@ fun ListScreen(
 		) { articles ->
 			ListItems(
 				articles = articles.collectAsLazyPagingItems(),
+				collection = collectionDetails.collection,
 				onItemClick = { navigate(Screens.DetailsScreen(it)) },
 				onLoadError = { errorMessage.value = it }
 			)

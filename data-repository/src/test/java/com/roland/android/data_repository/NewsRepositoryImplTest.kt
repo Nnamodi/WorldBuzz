@@ -45,13 +45,13 @@ class NewsRepositoryImplTest {
 		whenever(remoteNewsDataSource.fetchRecommendedNews("", "")).thenReturn(flowOf(sampleNewsData))
 		whenever(remoteNewsDataSource.fetchNewsByCategory("", "", 1)).thenReturn(sampleNewsData)
 		whenever(remoteNewsDataSource.fetchNewsBySource("", "", 1)).thenReturn(sampleNewsData)
-		whenever(remoteNewsDataSource.searchNews("", "", "", "", 1)).thenReturn(sampleNewsData)
+		whenever(remoteNewsDataSource.searchNews("", "", "", 1)).thenReturn(sampleNewsData)
 
 		val trendingNews = newsRepository.fetchTrendingNews("", "", "").first()
 		val recommendedNews = newsRepository.fetchRecommendedNews("", "").first()
 		val newsByCategory = newsRepository.fetchNewsByCategory("", "").first()
 		val newsBySource = newsRepository.fetchNewsBySource("", "").first()
-		val searchedNews = newsRepository.searchNews("", "", "", "").first()
+		val searchedNews = newsRepository.searchNews("", "", "").first()
 
 		val fetchedData = listOf(trendingNews, recommendedNews, newsByCategory, newsBySource, searchedNews)
 		val expectedData = listOf(sampleNewsData, sampleNewsData, sampleNewsPagingData, sampleNewsPagingData, sampleNewsPagingData)

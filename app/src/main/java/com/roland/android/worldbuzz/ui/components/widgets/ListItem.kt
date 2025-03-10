@@ -33,6 +33,7 @@ import com.roland.android.domain.model.Article
 import com.roland.android.worldbuzz.R
 import com.roland.android.worldbuzz.data.sampleNewsData
 import com.roland.android.worldbuzz.ui.components.ListPoster
+import com.roland.android.worldbuzz.ui.screens.list.EmptyListUi
 import com.roland.android.worldbuzz.ui.screens.list.ListLoadingItem
 import com.roland.android.worldbuzz.utils.Constants.NavigationBarHeight
 import com.roland.android.worldbuzz.utils.Converters.toJson
@@ -42,6 +43,7 @@ typealias ArticleJson = String
 @Composable
 fun ListItems(
 	articles: LazyPagingItems<Article>,
+	collection: String,
 	modifier: Modifier = Modifier,
 	onItemClick: (ArticleJson) -> Unit,
 	onLoadError: (String?) -> Unit
@@ -76,6 +78,10 @@ fun ListItems(
 			}
 		}
 		item { articles.appendStateUi() }
+	}
+
+	if (articles.itemCount == 0 && articles.loadState.refresh is LoadState.NotLoading) {
+		EmptyListUi(collection)
 	}
 }
 

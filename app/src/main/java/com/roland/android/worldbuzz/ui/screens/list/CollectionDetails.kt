@@ -12,7 +12,7 @@ data class CollectionDetails(
 ) {
 	fun getTitle(context: Context): String {
 		val collection = Collections.valueOf(collection)
-		val genericTitle = ""
+		val genericTitle = context.getString(R.string.news)
 		val title = when (collection) {
 			Collections.TrendingNews -> context.getString(R.string.trending)
 			Collections.RecommendedNews -> context.getString(R.string.recommended)

@@ -33,6 +33,7 @@ import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.roland.android.domain.model.Article
 import com.roland.android.domain.model.CategoryModel
+import com.roland.android.domain.usecase.Collections
 import com.roland.android.worldbuzz.R
 import com.roland.android.worldbuzz.data.State
 import com.roland.android.worldbuzz.data.sampleNewsPagingData
@@ -143,6 +144,7 @@ private fun NewsPager(
 
 			ListItems(
 				articles = articles.collectAsLazyPagingItems(),
+				collection = Collections.NewsByCategory.name,
 				onItemClick = onItemClick,
 				onLoadError = onLoadError
 			)

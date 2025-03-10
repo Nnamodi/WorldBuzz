@@ -7,8 +7,11 @@ import com.roland.android.data_local.database.SavedNewsDao
 import com.roland.android.data_local.database.SourceDao
 import com.roland.android.data_local.datastore.SubscribedCategoryStore
 import com.roland.android.domain.model.CategoryModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -22,7 +25,9 @@ class LocalNewsDataSourceImplTest {
 	private val savedNewsDao = mock<SavedNewsDao>()
 	private val sourceDao = mock<SourceDao>()
 	private val categoryStore = mock<SubscribedCategoryStore>()
-	private val localNewsDataSource = LocalNewsDataSourceImpl(newsDao, historyDao, savedNewsDao, sourceDao, categoryStore)
+	@OptIn(ExperimentalCoroutinesApi::class)
+	private val scope = TestScope(UnconfinedTestDispatcher())
+	private val localNewsDataSource = LocalNewsDataSourceImpl(newsDao, historyDao, savedNewsDao, sourceDao, categoryStore, scope)
 
 	@Test
 	fun testFetchLocalNews() = runTest {

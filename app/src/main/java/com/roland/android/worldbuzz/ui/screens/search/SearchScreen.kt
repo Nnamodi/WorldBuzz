@@ -24,6 +24,7 @@ import com.roland.android.worldbuzz.ui.navigation.Screens
 import com.roland.android.worldbuzz.ui.screens.CommonScaffold
 import com.roland.android.worldbuzz.ui.screens.CommonScreen
 import com.roland.android.worldbuzz.ui.screens.list.ListLoadingUi
+import com.roland.android.worldbuzz.utils.Constants.SEARCH
 
 @Composable
 fun SearchScreen(
@@ -71,6 +72,7 @@ fun SearchScreen(
 		) { articles ->
 			ListItems(
 				articles = articles.collectAsLazyPagingItems(),
+				collection = SEARCH,
 				onItemClick = { navigate(Screens.DetailsScreen(it)) },
 				onLoadError = { errorMessage.value = it }
 			)
