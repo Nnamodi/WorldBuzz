@@ -3,6 +3,7 @@ package com.roland.android.worldbuzz.ui.components.appbars
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
@@ -40,7 +41,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.roland.android.domain.model.Article
 import com.roland.android.worldbuzz.R
+import com.roland.android.worldbuzz.ui.components.DetailsPoster
 import com.roland.android.worldbuzz.ui.navigation.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -128,29 +131,32 @@ fun NewsSearchBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailsTopAppBar(
-	title: String,
+	article: Article,
 	articleSaved: Boolean,
 	saveArticle: (Boolean) -> Unit,
 	seeMore: () -> Unit,
 	navigate: (Screens) -> Unit
 ) {
-	LargeTopAppBar(
-		title = { Text(text = title) },
-		navigationIcon = {
-			IconButton(onClick = { navigate(Screens.Back) }) {
-				Icon(Icons.Rounded.ArrowBackIosNew, stringResource(R.string.back))
+	Box {
+		DetailsPoster(article)
+		LargeTopAppBar(
+			title = { Text(text = article.title) },
+			navigationIcon = {
+				IconButton(onClick = { navigate(Screens.Back) }) {
+					Icon(Icons.Rounded.ArrowBackIosNew, stringResource(R.string.back))
+				}
+			},
+			actions = {
+				IconButton(onClick = { saveArticle(!articleSaved) }) {
+					Icon(
+						imageVector = if (articleSaved) Icons.Rounded.Bookmark else Icons.Rounded.BookmarkBorder,
+						contentDescription = stringResource(if (articleSaved) R.string.unsave else R.string.save)
+					)
+				}
+				IconButton(onClick = seeMore) {
+					Icon(Icons.Rounded.MoreVert, stringResource(R.string.more))
+				}
 			}
-		},
-		actions = {
-			IconButton(onClick = { saveArticle(!articleSaved) }) {
-				Icon(
-					imageVector = if (articleSaved) Icons.Rounded.Bookmark else Icons.Rounded.BookmarkBorder,
-					contentDescription = stringResource(if (articleSaved) R.string.unsave else R.string.save)
-				)
-			}
-			IconButton(onClick = seeMore) {
-				Icon(Icons.Rounded.MoreVert, stringResource(R.string.more))
-			}
-		}
-	)
+		)
+	}
 }

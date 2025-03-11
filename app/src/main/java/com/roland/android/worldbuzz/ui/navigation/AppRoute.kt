@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.roland.android.worldbuzz.ui.screens.detail.DetailsScreen
+import com.roland.android.worldbuzz.ui.screens.detail.DetailsViewModel
 import com.roland.android.worldbuzz.ui.screens.discover.DiscoverViewModel
 import com.roland.android.worldbuzz.ui.screens.home.HomeViewModel
 import com.roland.android.worldbuzz.ui.screens.list.ListScreen
@@ -20,6 +22,7 @@ fun AppRoute(navController: NavHostController) {
 	val navActions = NavActions(navController)
 	val homeViewModel: HomeViewModel = koinViewModel()
 	val discoverViewModel: DiscoverViewModel = koinViewModel()
+	val detailsViewModel: DetailsViewModel = koinViewModel()
 	val listViewModel: ListViewModel = koinViewModel()
 	val searchViewModel: SearchViewModel = koinViewModel()
 
@@ -32,6 +35,18 @@ fun AppRoute(navController: NavHostController) {
 			homeViewModel = homeViewModel,
 			discoverViewModel = discoverViewModel
 		)
+		animatedComposable(AppRoute.DetailsScreen.route) { backStackEntry ->
+			val articleJson = backStackEntry.arguments?.getString("article") ?: ""
+			LaunchedEffect(true) {
+				detailsViewModel.getArticle(articleJson)
+			}
+
+			DetailsScreen(
+				uiState = detailsViewModel.detailsUiState,
+				actions = detailsViewModel::actions,
+				navigate = navActions::navigate
+			)
+		}
 		animatedComposable(AppRoute.ListScreen.route) { backStackEntry ->
 			val collectionJson = backStackEntry.arguments?.getString("collection") ?: ""
 			val collectionDetails = collectionJson.toCollectionDetails()

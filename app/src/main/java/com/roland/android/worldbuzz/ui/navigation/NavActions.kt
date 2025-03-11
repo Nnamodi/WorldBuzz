@@ -31,9 +31,9 @@ class NavActions(private val navController: NavHostController) {
 	}
 
 	private fun navigateToDetailsScreen(articleJson: String) {
-//		navController.navigate(
-//			AppRoute.DetailsScreen.routeWithArticle(articleJson)
-//		)
+		navController.navigate(
+			AppRoute.DetailsScreen.routeWithArticle(articleJson)
+		)
 	}
 
 	private fun navigateToSearchScreen() {
