@@ -16,7 +16,7 @@ class GetNewsBySearchUseCase(
 		return newsRepository.searchNews(
 			query = request.query,
 			category = request.category,
-			sources = request.sources.joinToString { SEPARATOR }
+			sources = request.sources.joinToString(SEPARATOR)
 		)
 			.map { Response(it) }
 	}

@@ -6,8 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.roland.android.domain.model.Source
-import com.roland.android.domain.model.SourceDetail
 import com.roland.android.domain.repository.NewsRepository
 import com.roland.android.domain.repository.SettingsRepository
 import com.roland.android.domain.usecase.GetNewsBySearchUseCase
@@ -29,8 +27,6 @@ class SearchViewModel : ViewModel(), KoinComponent {
 	var searchUiState by mutableStateOf(_searchUiState.value); private set
 	private var selectedLanguage by mutableStateOf("")
 	private var searchPref by mutableStateOf(SearchPref())
-	private var subscribedSources = emptyList<Source>()
-	private var allSources = emptyList<SourceDetail>()
 
 	init {
 		fetchAllSources()
@@ -41,35 +37,23 @@ class SearchViewModel : ViewModel(), KoinComponent {
 		}
 	}
 
-	private fun fetchSubscribedSources() {
-		viewModelScope.launch {
-			Log.i("SearchDataInfo", "Fetching subbed-sources...")
-			newsRepository.fetchSubscribedSources().collect {
-				subscribedSources = it
-				Log.i("SearchDataInfo", "Subbed: $subscribedSources")
-			}
-		}
-	}
-
 	private fun fetchAllSources() {
-		fetchSubscribedSources()
 		viewModelScope.launch {
-			Log.i("SearchDataInfo", "Fetching all...")
-			newsRepository.fetchAllSources().collect { sourceDetailList ->
-				val subscribedSources = sourceDetailList.filter { sourceDetail ->
-					sourceDetail.name in subscribedSources.map { it.name }
+			newsRepository.fetchAllSources().collect { sources ->
+				_searchUiState.update { state ->
+					state.copy(
+						newsSources = sources
+							.sortedBy { it.subscribed }
+							.take(12)
+					)
 				}
-				_searchUiState.update { it.copy(
-					newsSources = (subscribedSources + allSources).take(12)
-				) }
-				Log.i("SearchDataInfo", "$allSources")
+				Log.i("SearchDataInfo", "$sources")
 			}
 		}
 	}
 
 	private fun fetchSelectedLanguage() {
 		viewModelScope.launch {
-			Log.i("SearchDataInfo", "Fetching language...")
 			settingsRepository.getSelectedLanguage().collect {
 				selectedLanguage = it.code
 				Log.i("SearchDataInfo", selectedLanguage)

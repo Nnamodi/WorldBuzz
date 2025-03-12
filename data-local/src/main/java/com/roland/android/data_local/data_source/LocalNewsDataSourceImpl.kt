@@ -30,7 +30,7 @@ class LocalNewsDataSourceImpl(
 	private val scope: CoroutineScope
 ) : LocalNewsDataSource {
 	override fun fetchTrendingNews(categories: List<String>): Flow<List<Article>> {
-		val categoryList = categories.joinToString { SEPARATOR }
+		val categoryList = categories.joinToString(SEPARATOR)
 		return newsDao.fetchTrendingNews(categoryList)
 			.map { articleEntities ->
 				articleEntities.map { it.convertToArticle() }
@@ -39,7 +39,7 @@ class LocalNewsDataSourceImpl(
 
 	override fun saveTrendingNews(categories: List<String>, news: List<Article>) {
 		scope.launch {
-			val categoryList = categories.joinToString { SEPARATOR }
+			val categoryList = categories.joinToString(SEPARATOR)
 			val trendingNews = news.map { it.convertToArticleEntity(categoryList) }
 			newsDao.saveTrendingNews(trendingNews)
 		}
@@ -96,7 +96,7 @@ class LocalNewsDataSourceImpl(
 	}
 
 	override fun fetchSubscribedSources(): Flow<List<Source>> {
-		return sourceDao.fetchAllSources()
+		return sourceDao.fetchSubscribedSources()
 			.map { sourceEntities ->
 				sourceEntities.map { it.convertToSource() }
 			}

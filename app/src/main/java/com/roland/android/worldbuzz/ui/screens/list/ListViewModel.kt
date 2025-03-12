@@ -17,7 +17,6 @@ import com.roland.android.domain.usecase.GetNewsByCollectionUseCase
 import com.roland.android.worldbuzz.data.ResponseConverter
 import com.roland.android.worldbuzz.data.State
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -36,18 +35,34 @@ class ListViewModel : ViewModel(), KoinComponent {
 	private var selectedLanguage by mutableStateOf("")
 	private var collectionDetails by mutableStateOf(CollectionDetails())
 
-	private fun fetchPrefs() {
+	private fun fetchSubscribedCategories() {
 		viewModelScope.launch {
-			combine(
-				newsRepository.fetchSubscribedCategories(),
-				newsRepository.fetchSubscribedSources(),
-				settingsRepository.getSelectedLanguage()
-			) { categories, sources, language ->
-				subscribedCategories = categories
-				subscribedSources = sources
-				selectedLanguage = language.code
+			newsRepository.fetchSubscribedCategories().collect {
+				subscribedCategories = it
 			}
 		}
+	}
+
+	private fun fetchSubscribedSources() {
+		viewModelScope.launch {
+			newsRepository.fetchSubscribedSources().collect {
+				subscribedSources = it
+			}
+		}
+	}
+
+	private fun fetchSelectedLanguage() {
+		viewModelScope.launch {
+			settingsRepository.getSelectedLanguage().collect {
+				selectedLanguage = it.code
+			}
+		}
+	}
+
+	private fun fetchPrefs() {
+		fetchSubscribedCategories()
+		fetchSubscribedSources()
+		fetchSelectedLanguage()
 	}
 
 	fun fetchNewsByCollection(details: CollectionDetails) {

@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface SourceDao {
 
-	@Query("SELECT * FROM SourceDetailEntity")
+	@Query("SELECT * FROM SourceDetailEntity ORDER  BY name")
 	fun fetchAllSources(): Flow<List<SourceDetailEntity>>
 
 	@Query("SELECT * FROM SourceDetailEntity WHERE subscribed LIKE 1")

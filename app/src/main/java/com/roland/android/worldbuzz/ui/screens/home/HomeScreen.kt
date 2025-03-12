@@ -49,6 +49,7 @@ import com.roland.android.worldbuzz.utils.Constants.PADDING_WIDTH
 import com.roland.android.worldbuzz.utils.Converters.toJson
 import com.roland.android.worldbuzz.utils.animatePagerItem
 import kotlinx.coroutines.launch
+import kotlin.math.min
 
 @Composable
 fun HomeScreen(
@@ -133,7 +134,7 @@ private fun TrendingNewsPager(
 	onSeeMoreClick: () -> Unit
 ) {
 	val scope = rememberCoroutineScope()
-	val pagerState = rememberPagerState { 20 }
+	val pagerState = rememberPagerState { min(20, trendingNews.size) }
 	val paddingTargetValue = remember(pagerState.currentPage) {
 		derivedStateOf { if (pagerState.currentPage == 0) PADDING_WIDTH else 40.dp }
 	}

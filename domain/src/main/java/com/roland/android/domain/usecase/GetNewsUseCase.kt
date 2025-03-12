@@ -15,8 +15,8 @@ class GetNewsUseCase(
 
 	override fun process(request: Request): Flow<Response> = combine(
 		newsRepository.fetchTrendingNews(
-			request.categoryModels.map { it.category }.joinToString { SEPARATOR },
-			request.sources.map { it.name }.joinToString { SEPARATOR },
+			request.categoryModels.joinToString(SEPARATOR) { it.category },
+			request.sources.joinToString(SEPARATOR) { it.name },
 			request.languageCode
 		),
 		newsRepository.fetchRecommendedNews(

@@ -25,7 +25,7 @@ class GetNewsByCollectionUseCase(
 			TrendingNews -> newsRepository.searchNews(
 				query = "",
 				category = request.categoryModels.getOrNull(0)?.category ?: "",
-				sources = request.sources.map { it.name }.joinToString { SEPARATOR }
+				sources = request.sources.joinToString(SEPARATOR) { it.name }
 			)
 			RecommendedNews -> newsRepository.fetchNewsByCategory(
 				category = request.categoryModels.getOrNull(0)?.category ?: "",
