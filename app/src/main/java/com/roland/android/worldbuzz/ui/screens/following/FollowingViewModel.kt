@@ -1,5 +1,8 @@
 package com.roland.android.worldbuzz.ui.screens.following
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.roland.android.domain.model.CategoryModel
@@ -7,7 +10,8 @@ import com.roland.android.domain.model.SourceDetail
 import com.roland.android.domain.repository.NewsRepository
 import com.roland.android.domain.repository.UtilityRepository
 import com.roland.android.worldbuzz.utils.Converters.update
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -16,30 +20,39 @@ class FollowingViewModel : ViewModel(), KoinComponent {
 	private val newsRepository by inject<NewsRepository>()
 	private val utilityRepository by inject<UtilityRepository>()
 
-	var subscribedCategories = emptyList<CategoryModel>(); private set
-	var subscribedSources = emptyList<SourceDetail>(); private set
+	private val _categoriesUiState = MutableStateFlow(CategoriesUiState())
+	var categoriesUiState by mutableStateOf(_categoriesUiState.value); private set
+
+	private val _sourcesUiState = MutableStateFlow(SourcesUiState())
+	var sourcesUiState by mutableStateOf(_sourcesUiState.value); private set
 
 	init {
 		fetchSubscribedCategories()
-		fetchSubscribedSources()
-	}
-
-	private fun fetchSubscribedCategories() {
+		fetchAllSources()
 		viewModelScope.launch {
-			newsRepository.fetchSubscribedCategories().collect {
-				subscribedCategories = it
+			_categoriesUiState.collect {
+				categoriesUiState = it
+			}
+		}
+		viewModelScope.launch {
+			_sourcesUiState.collect {
+				sourcesUiState = it
 			}
 		}
 	}
 
-	private fun fetchSubscribedSources() {
+	private fun fetchSubscribedCategories() {
 		viewModelScope.launch {
-			combine(
-				newsRepository.fetchAllSources(),
-				newsRepository.fetchSubscribedSources()
-			) { newsSources, subscribedNewsSources ->
-				val subscribed = subscribedNewsSources.map { it.id }
-				subscribedSources = newsSources.filter { it.id in subscribed }
+			newsRepository.fetchSubscribedCategories().collect { categories ->
+				_categoriesUiState.update { it.copy(subscribedCategories = categories) }
+			}
+		}
+	}
+
+	private fun fetchAllSources() {
+		viewModelScope.launch {
+			newsRepository.fetchAllSources().collect { sources ->
+				_sourcesUiState.update { it.copy(allSources = sources) }
 			}
 		}
 	}
@@ -52,14 +65,15 @@ class FollowingViewModel : ViewModel(), KoinComponent {
 	}
 
 	private fun updateSubscribedCategories(category: CategoryModel, subscribe: Boolean) {
-		val newCategories = if (subscribe) subscribedCategories + category else {
-			subscribedCategories - category
+		val newCategories = if (subscribe) categoriesUiState.subscribedCategories + category else {
+			categoriesUiState.subscribedCategories - category
 		}
 		utilityRepository.updateSubscribedCategories(newCategories)
+		fetchSubscribedCategories()
 	}
 
 	private fun updateSubscribedSources(source: SourceDetail, subscribe: Boolean) {
-		val sources = subscribedSources - source
+		val sources = sourcesUiState.allSources - source
 		val updatedSource = source.update(subscribe)
 		val newSources = sources + updatedSource
 		utilityRepository.updateSubscribedSources(newSources)

@@ -7,6 +7,9 @@ import androidx.navigation.compose.NavHost
 import com.roland.android.worldbuzz.ui.screens.detail.DetailsScreen
 import com.roland.android.worldbuzz.ui.screens.detail.DetailsViewModel
 import com.roland.android.worldbuzz.ui.screens.discover.DiscoverViewModel
+import com.roland.android.worldbuzz.ui.screens.following.CategoriesScreen
+import com.roland.android.worldbuzz.ui.screens.following.FollowingViewModel
+import com.roland.android.worldbuzz.ui.screens.following.SourcesScreen
 import com.roland.android.worldbuzz.ui.screens.home.HomeViewModel
 import com.roland.android.worldbuzz.ui.screens.list.ListScreen
 import com.roland.android.worldbuzz.ui.screens.list.ListViewModel
@@ -25,6 +28,7 @@ fun AppRoute(navController: NavHostController) {
 	val detailsViewModel: DetailsViewModel = koinViewModel()
 	val listViewModel: ListViewModel = koinViewModel()
 	val searchViewModel: SearchViewModel = koinViewModel()
+	val followingViewModel: FollowingViewModel = koinViewModel()
 
 	NavHost(
 		navController = navController,
@@ -68,6 +72,20 @@ fun AppRoute(navController: NavHostController) {
 			SearchScreen(
 				uiState = searchViewModel.searchUiState,
 				action = searchViewModel::actions,
+				navigate = navActions::navigate
+			)
+		}
+		animatedComposable(AppRoute.CategoriesScreen.route) {
+			CategoriesScreen(
+				uiState = followingViewModel.categoriesUiState,
+				actions = followingViewModel::actions,
+				navigate = navActions::navigate
+			)
+		}
+		animatedComposable(AppRoute.SourcesScreen.route) {
+			SourcesScreen(
+				uiState = followingViewModel.sourcesUiState,
+				actions = followingViewModel::actions,
 				navigate = navActions::navigate
 			)
 		}

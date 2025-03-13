@@ -99,6 +99,21 @@ fun ListPoster(
 }
 
 @Composable
+fun SourceItemPoster(
+	iconUrl: String,
+	name: String,
+	modifier: Modifier = Modifier
+) {
+	Poster(
+		model = iconUrl,
+		contentDescription = name,
+		modifier = modifier
+			.clip(CircleShape)
+			.size(50.dp)
+	)
+}
+
+@Composable
 private fun Poster(
 	model: String,
 	contentDescription: String?,

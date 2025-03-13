@@ -77,7 +77,7 @@ fun ProfileScreen(navigate: (Screens) -> Unit) {
 			OptionItem(
 				icon = Categories.icon,
 				label = stringResource(Categories.label),
-				onClick = { navigate(Screens.CategoryScreen) }
+				onClick = { navigate(Screens.CategoriesScreen) }
 			)
 			OptionItem(
 				icon = Publishers.icon,

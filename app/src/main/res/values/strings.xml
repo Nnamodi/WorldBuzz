@@ -33,4 +33,6 @@
     <string name="nothing_read">You haven\'t read any articles yet</string>
     <string name="nothing_saved">You haven\'t saved any articles yet</string>
     <string name="news">News</string>
+    <string name="done">Done</string>
+    <string name="must_subscribe_to_one">Must be subscribed to at least one category</string>
 </resources>

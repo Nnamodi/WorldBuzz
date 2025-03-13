@@ -24,10 +24,19 @@ val sampleNewsData = listOf(
 val sampleNewsPagingData = PagingData.from(sampleNewsData).refactor()
 
 val sampleNewsSource = listOf(
-	SourceDetail(name = "a"), SourceDetail(name = "k"),
-	SourceDetail(name = "b"), SourceDetail(name = "l"),
-	SourceDetail(name = "c"), SourceDetail(name = "m"),
-	SourceDetail(name = "d"), SourceDetail(name = "n"),
-	SourceDetail(name = "e"), SourceDetail(name = "o"),
-	SourceDetail(name = "f"), SourceDetail(name = "p")
+	SourceDetail(name = "The Business Of Fashion"), SourceDetail(name = "CNN"),
+	SourceDetail(name = "The New York Times"), SourceDetail(name = "Al jazeera"),
+	SourceDetail(name = "Consumer Reports"), SourceDetail(name = "Channels"),
+	SourceDetail(name = "Financial Times"), SourceDetail(name = "Fox News"),
+	SourceDetail(name = "The Atlantic"), SourceDetail(name = "NTA"),
+	SourceDetail(name = "Bloomberg"), SourceDetail(name = "Noahpinion")
+)
+
+val sampleNewsSourceI = listOf(
+	Source(name = "The Business Of Fashion"), Source(name = "CNN"),
+	Source(name = "The New York Times"), Source(name = "Al jazeera"),
+	Source(name = "Consumer Reports"), Source(name = "Channels"),
+	Source(name = "Financial Times"), Source(name = "Fox News"),
+	Source(name = "The Atlantic"), Source(name = "NTA"),
+	Source(name = "Bloomberg"), Source(name = "Noahpinion")
 )

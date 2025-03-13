@@ -51,13 +51,16 @@ import com.roland.android.worldbuzz.ui.navigation.Screens
 fun TopAppBar(
 	title: String,
 	canGoBack: Boolean = true,
-	navigate: (Screens) -> Unit = {}
+	navigate: ((Screens) -> Unit)? = null
 ) {
+	if (canGoBack) {
+		requireNotNull(navigate) { "Must implement navigate() function if canGoBack" }
+	}
 	CenterAlignedTopAppBar(
 		title = { Text(text = title, fontWeight = FontWeight.Bold) },
 		navigationIcon = {
 			if (canGoBack) {
-				IconButton(onClick = { navigate(Screens.Back) }) {
+				IconButton(onClick = { navigate?.invoke(Screens.Back) }) {
 					Icon(Icons.Rounded.ArrowBackIosNew, stringResource(R.string.back))
 				}
 			}
